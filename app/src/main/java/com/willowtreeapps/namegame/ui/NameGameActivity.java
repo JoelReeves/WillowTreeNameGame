@@ -16,6 +16,10 @@ public class NameGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.name_game_activity);
         NameGameApplication.get(this).component().inject(this);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, NameGameFragment.newInstance())
+                .commit();
     }
 
 }

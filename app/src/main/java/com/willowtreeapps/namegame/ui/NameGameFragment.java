@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.core.ListRandomizer;
 import com.willowtreeapps.namegame.core.NameGameApplication;
+import com.willowtreeapps.namegame.network.api.NameGameApi;
 import com.willowtreeapps.namegame.network.api.model.Item;
 import com.willowtreeapps.namegame.network.api.model.Profiles;
 import com.willowtreeapps.namegame.util.CircleBorderTransform;
@@ -26,18 +27,26 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
+
 public class NameGameFragment extends Fragment {
 
     private static final Interpolator OVERSHOOT = new OvershootInterpolator();
 
-    @Inject
-    ListRandomizer listRandomizer;
-    @Inject
-    Picasso picasso;
+    @Inject NameGameApi nameGameApi;
+    @Inject ListRandomizer listRandomizer;
+    @Inject Picasso picasso;
 
     private TextView title;
     private ViewGroup container;
     private List<ImageView> faces = new ArrayList<>(5);
+
+    public static NameGameFragment newInstance() {
+        return new NameGameFragment();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +77,31 @@ public class NameGameFragment extends Fragment {
             face.setScaleX(0);
             face.setScaleY(0);
         }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getProfiles();
+    }
+
+    private void getProfiles() {
+        nameGameApi.getProfiles().enqueue(new Callback<Profiles>() {
+            @Override
+            public void onResponse(Call<Profiles> call, Response<Profiles> response) {
+                if (response.isSuccessful()) {
+                    Timber.d(response.body().toString());
+                } else {
+                    Timber.d("network error");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profiles> call, Throwable t) {
+                Timber.d(t.getMessage());
+            }
+        });
     }
 
     /**
