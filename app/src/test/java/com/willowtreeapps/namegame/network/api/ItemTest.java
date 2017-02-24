@@ -5,18 +5,18 @@ import android.os.Parcel;
 
 import com.google.gson.Gson;
 import com.willowtreeapps.namegame.BuildConfig;
-import com.willowtreeapps.namegame.network.api.model.Person;
+import com.willowtreeapps.namegame.network.api.model.Item;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class PersonTest {
+public class ItemTest {
 
     private Gson gson;
     private String testString;
@@ -48,16 +48,16 @@ public class PersonTest {
 
     @Test
     public void testFromGson() throws Exception {
-        Person person = gson.fromJson(testString, Person.class);
+        Item item = gson.fromJson(testString, Item.class);
 
         // Test name
-        Assert.assertEquals("First name should match", "Joel", person.getFirstName());
-        Assert.assertEquals("Last name should match", "Garrett", person.getLastName());
+        Assert.assertEquals("First name should match", "Joel", item.getFirstName());
+        Assert.assertEquals("Last name should match", "Garrett", item.getLastName());
 
         // Test headshot url
         Assert.assertEquals("Headshot url should match",
                 "//images.contentful.com/3cttzl4i3k1h/4Mv2CONANym46UwuuCIgK/cbeb43c93a843a43c07b1de9954795e2/headshot_joel_garrett.jpg",
-                person.getHeadshot().getUrl());
+                item.getHeadshot().getUrl());
 
     }
 
@@ -66,22 +66,22 @@ public class PersonTest {
         Parcel parcel = Parcel.obtain();
 
         //Write ourselves to the parcel
-        Person person = gson.fromJson(testString, Person.class);
-        person.writeToParcel(parcel, 0);
+        Item item = gson.fromJson(testString, Item.class);
+        item.writeToParcel(parcel, 0);
 
         // After you're done with writing, you need to reset the parcel for reading:
         parcel.setDataPosition(0);
 
         // Reconstruct object from parcel and asserts:
-        person = Person.CREATOR.createFromParcel(parcel);
+        item = Item.CREATOR.createFromParcel(parcel);
 
         // Test name
-        Assert.assertEquals("First name should match", "Joel", person.getFirstName());
-        Assert.assertEquals("Last name should match", "Garrett", person.getLastName());
+        Assert.assertEquals("First name should match", "Joel", item.getFirstName());
+        Assert.assertEquals("Last name should match", "Garrett", item.getLastName());
 
         // Test headshot url
         Assert.assertEquals("Headshot url should match",
                 "//images.contentful.com/3cttzl4i3k1h/4Mv2CONANym46UwuuCIgK/cbeb43c93a843a43c07b1de9954795e2/headshot_joel_garrett.jpg",
-                person.getHeadshot().getUrl());
+                item.getHeadshot().getUrl());
     }
 }

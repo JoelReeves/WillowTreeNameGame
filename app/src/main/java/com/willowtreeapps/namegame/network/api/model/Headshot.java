@@ -3,15 +3,26 @@ package com.willowtreeapps.namegame.network.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Headshot implements Parcelable {
 
+    @JsonProperty("type")
     private String type;
+    @JsonProperty("mimeType")
     private String mimeType;
+    @JsonProperty("id")
     private String id;
+    @JsonProperty("url")
     private String url;
+    @JsonProperty("alt")
     private String alt;
-    private int height;
-    private int width;
+    @JsonProperty("height")
+    private Integer height;
+    @JsonProperty("width")
+    private Integer width;
 
     public Headshot(String type,
                     String mimeType,

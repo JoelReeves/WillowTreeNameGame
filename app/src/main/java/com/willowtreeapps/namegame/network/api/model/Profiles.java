@@ -3,30 +3,36 @@ package com.willowtreeapps.namegame.network.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Profiles implements Parcelable {
 
-    private List<Person> items;
-    private Metadata meta;
+    @JsonProperty("items")
+    public List<Item> items;
+    @JsonProperty("meta")
+    public Meta meta;
 
-    public Profiles(List<Person> items, Metadata meta) {
+    public Profiles(List<Item> items, Meta meta) {
         this.items = items;
         this.meta = meta;
     }
 
     private Profiles(Parcel in) {
         this.items = new ArrayList<>();
-        in.readList(this.items, Person.class.getClassLoader());
-        this.meta = in.readParcelable(Metadata.class.getClassLoader());
+        in.readList(this.items, Item.class.getClassLoader());
+        this.meta = in.readParcelable(Meta.class.getClassLoader());
     }
 
-    public List<Person> getPeople() {
+    public List<Item> getPeople() {
         return items;
     }
 
-    public Metadata getMetadata() {
+    public Meta getMetadata() {
         return meta;
     }
 

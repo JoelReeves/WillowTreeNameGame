@@ -3,27 +3,39 @@ package com.willowtreeapps.namegame.network.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-public class Person implements Parcelable {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Item implements Parcelable {
 
-    private final String id;
-    private final String type;
-    private final String slug;
-    private final String jobTitle;
-    private final String firstName;
-    private final String lastName;
-    private final Headshot headshot;
-    private final List<String> socialLinks;
+    @JsonProperty("id")
+    private String id;
+    @JsonProperty("type")
+    private String type;
+    @JsonProperty("slug")
+    private String slug;
+    @JsonProperty("jobTitle")
+    private String jobTitle;
+    @JsonProperty("firstName")
+    private String firstName;
+    @JsonProperty("lastName")
+    private String lastName;
+    @JsonProperty("headshot")
+    private Headshot headshot;
+    @JsonProperty("socialLinks")
+    private List<String> socialLinks;
 
-    public Person(String id,
-                  String type,
-                  String slug,
-                  String jobTitle,
-                  String firstName,
-                  String lastName,
-                  Headshot headshot,
-                  List<String> socialLinks) {
+    public Item(String id,
+                String type,
+                String slug,
+                String jobTitle,
+                String firstName,
+                String lastName,
+                Headshot headshot,
+                List<String> socialLinks) {
         this.id = id;
         this.type = type;
         this.slug = slug;
@@ -34,7 +46,7 @@ public class Person implements Parcelable {
         this.socialLinks = socialLinks;
     }
 
-    private Person(Parcel in) {
+    private Item(Parcel in) {
         this.id = in.readString();
         this.type = in.readString();
         this.slug = in.readString();
@@ -89,15 +101,15 @@ public class Person implements Parcelable {
         dest.writeStringList(this.socialLinks);
     }
 
-    public static final Creator<Person> CREATOR = new Creator<Person>() {
+    public static final Creator<Item> CREATOR = new Creator<Item>() {
         @Override
-        public Person createFromParcel(Parcel source) {
-            return new Person(source);
+        public Item createFromParcel(Parcel source) {
+            return new Item(source);
         }
 
         @Override
-        public Person[] newArray(int size) {
-            return new Person[size];
+        public Item[] newArray(int size) {
+            return new Item[size];
         }
     };
 

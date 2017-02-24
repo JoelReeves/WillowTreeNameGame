@@ -3,19 +3,26 @@ package com.willowtreeapps.namegame.network.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Metadata implements Parcelable {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private final int skip;
-    private final int limit;
-    private final int total;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Meta implements Parcelable {
 
-    public Metadata(int skip, int limit, int total) {
+    @JsonProperty("skip")
+    private Integer skip;
+    @JsonProperty("limit")
+    private Integer limit;
+    @JsonProperty("total")
+    private Integer total;
+
+    public Meta(int skip, int limit, int total) {
         this.skip = skip;
         this.limit = limit;
         this.total = total;
     }
 
-    private Metadata(Parcel in) {
+    private Meta(Parcel in) {
         this.skip = in.readInt();
         this.limit = in.readInt();
         this.total = in.readInt();
@@ -40,15 +47,15 @@ public class Metadata implements Parcelable {
         dest.writeInt(this.total);
     }
 
-    public static final Creator<Metadata> CREATOR = new Creator<Metadata>() {
+    public static final Creator<Meta> CREATOR = new Creator<Meta>() {
         @Override
-        public Metadata createFromParcel(Parcel source) {
-            return new Metadata(source);
+        public Meta createFromParcel(Parcel source) {
+            return new Meta(source);
         }
 
         @Override
-        public Metadata[] newArray(int size) {
-            return new Metadata[size];
+        public Meta[] newArray(int size) {
+            return new Meta[size];
         }
     };
 

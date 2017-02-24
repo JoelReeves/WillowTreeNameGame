@@ -4,7 +4,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import com.willowtreeapps.namegame.network.api.NameGameApi;
 import com.willowtreeapps.namegame.network.api.ProfilesRepository;
-import com.willowtreeapps.namegame.network.api.model.Person;
+import com.willowtreeapps.namegame.network.api.model.Item;
 import com.willowtreeapps.namegame.network.api.model.Profiles;
 
 import org.junit.Rule;
@@ -30,10 +30,10 @@ public class ProfilesRepositoryTest {
     private static final Profiles PROFILES;
 
     static {
-        List<Person> people = new ArrayList<>();
-        people.add(new Person("1", null, null, null, "Bill", "Smith", null, null));
-        people.add(new Person("2", null, null, null, "Pam", "White", null, null));
-        people.add(new Person("3", null, null, null, "Fred", "Doe", null, null));
+        List<Item> people = new ArrayList<>();
+        people.add(new Item("1", null, null, null, "Bill", "Smith", null, null));
+        people.add(new Item("2", null, null, null, "Pam", "White", null, null));
+        people.add(new Item("3", null, null, null, "Fred", "Doe", null, null));
         PROFILES = new Profiles(people, null);
     }
 
