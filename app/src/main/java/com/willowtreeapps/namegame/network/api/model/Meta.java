@@ -16,6 +16,8 @@ public class Meta implements Parcelable {
     @JsonProperty("total")
     private Integer total;
 
+    public Meta() {}
+
     public Meta(int skip, int limit, int total) {
         this.skip = skip;
         this.limit = limit;
@@ -40,6 +42,18 @@ public class Meta implements Parcelable {
         return total;
     }
 
+    public void setSkip(Integer skip) {
+        this.skip = skip;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.skip);
@@ -62,5 +76,14 @@ public class Meta implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Meta{" +
+                "skip=" + skip +
+                ", limit=" + limit +
+                ", total=" + total +
+                '}';
     }
 }

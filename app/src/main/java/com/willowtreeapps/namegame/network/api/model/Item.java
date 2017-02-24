@@ -26,7 +26,9 @@ public class Item implements Parcelable {
     @JsonProperty("headshot")
     private Headshot headshot;
     @JsonProperty("socialLinks")
-    private List<String> socialLinks;
+    private List<Object> socialLinks;
+
+    public Item() {}
 
     public Item(String id,
                 String type,
@@ -35,7 +37,7 @@ public class Item implements Parcelable {
                 String firstName,
                 String lastName,
                 Headshot headshot,
-                List<String> socialLinks) {
+                List<Object> socialLinks) {
         this.id = id;
         this.type = type;
         this.slug = slug;
@@ -54,7 +56,7 @@ public class Item implements Parcelable {
         this.firstName = in.readString();
         this.lastName = in.readString();
         this.headshot = in.readParcelable(Headshot.class.getClassLoader());
-        this.socialLinks = in.createStringArrayList();
+        in.readList(socialLinks, Object.class.getClassLoader());
     }
 
     public String getId() {
@@ -85,8 +87,40 @@ public class Item implements Parcelable {
         return headshot;
     }
 
-    public List<String> getSocialLinks() {
+    public List<Object> getSocialLinks() {
         return socialLinks;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setHeadshot(Headshot headshot) {
+        this.headshot = headshot;
+    }
+
+    public void setSocialLinks(List<Object> socialLinks) {
+        this.socialLinks = socialLinks;
     }
 
     @Override
@@ -98,7 +132,7 @@ public class Item implements Parcelable {
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
         dest.writeParcelable(this.headshot, flags);
-        dest.writeStringList(this.socialLinks);
+        dest.writeList(this.socialLinks);
     }
 
     public static final Creator<Item> CREATOR = new Creator<Item>() {
@@ -116,5 +150,19 @@ public class Item implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                ", slug='" + slug + '\'' +
+                ", jobTitle='" + jobTitle + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", headshot=" + headshot +
+                ", socialLinks=" + socialLinks +
+                '}';
     }
 }

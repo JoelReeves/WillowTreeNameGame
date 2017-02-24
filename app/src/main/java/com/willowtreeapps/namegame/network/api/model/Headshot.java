@@ -24,6 +24,8 @@ public class Headshot implements Parcelable {
     @JsonProperty("width")
     private Integer width;
 
+    public Headshot() {}
+
     public Headshot(String type,
                     String mimeType,
                     String id,
@@ -78,6 +80,34 @@ public class Headshot implements Parcelable {
         return width;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setAlt(String alt) {
+        this.alt = alt;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.type);
@@ -104,5 +134,18 @@ public class Headshot implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Headshot{" +
+                "type='" + type + '\'' +
+                ", mimeType='" + mimeType + '\'' +
+                ", id='" + id + '\'' +
+                ", url='" + url + '\'' +
+                ", alt='" + alt + '\'' +
+                ", height=" + height +
+                ", width=" + width +
+                '}';
     }
 }

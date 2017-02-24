@@ -17,15 +17,11 @@ public class Profiles implements Parcelable {
     @JsonProperty("meta")
     public Meta meta;
 
+    public Profiles() {}
+
     public Profiles(List<Item> items, Meta meta) {
         this.items = items;
         this.meta = meta;
-    }
-
-    private Profiles(Parcel in) {
-        this.items = new ArrayList<>();
-        in.readList(this.items, Item.class.getClassLoader());
-        this.meta = in.readParcelable(Meta.class.getClassLoader());
     }
 
     public List<Item> getPeople() {
@@ -34,6 +30,20 @@ public class Profiles implements Parcelable {
 
     public Meta getMetadata() {
         return meta;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public void setMeta(Meta meta) {
+        this.meta = meta;
+    }
+
+    private Profiles(Parcel in) {
+        this.items = new ArrayList<>();
+        in.readList(this.items, Item.class.getClassLoader());
+        this.meta = in.readParcelable(Meta.class.getClassLoader());
     }
 
     @Override
@@ -57,5 +67,13 @@ public class Profiles implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Profiles{" +
+                "items=" + items +
+                ", meta=" + meta +
+                '}';
     }
 }

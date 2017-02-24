@@ -23,7 +23,7 @@ import okhttp3.Cache;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 @Module
 public class NetworkModule {
@@ -74,7 +74,7 @@ public class NetworkModule {
         return new Retrofit.Builder()
                 .client(client)
                 .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(JacksonConverterFactory.create())
                 .validateEagerly(BuildConfig.DEBUG)
                 .build()
                 .create(NameGameApi.class);
