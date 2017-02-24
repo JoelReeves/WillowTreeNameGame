@@ -4,7 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.willowtreeapps.namegame.BuildConfig;
 import com.willowtreeapps.namegame.network.NetworkModule;
+
+import timber.log.Timber;
 
 public class NameGameApplication extends Application {
 
@@ -18,6 +21,10 @@ public class NameGameApplication extends Application {
     public void onCreate() {
         super.onCreate();
         component = buildComponent();
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
     }
 
     public ApplicationComponent component() {
