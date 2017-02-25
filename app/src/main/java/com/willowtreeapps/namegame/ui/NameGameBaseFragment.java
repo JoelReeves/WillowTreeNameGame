@@ -1,5 +1,6 @@
 package com.willowtreeapps.namegame.ui;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,8 @@ import com.willowtreeapps.namegame.util.DialogBuilder;
 
 public abstract class NameGameBaseFragment extends Fragment {
 
+    protected abstract void inject(ApplicationComponent component);
+
     @Nullable private ProgressDialog progressDialog;
 
     @Override
@@ -20,7 +23,12 @@ public abstract class NameGameBaseFragment extends Fragment {
         inject(((NameGameApplication) getActivity().getApplication()).component());
     }
 
-    protected abstract void inject(ApplicationComponent component);
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        dismissDialogsIfNecessary(progressDialog);
+    }
 
     protected void showProgressDialog() {
         if (isAdded()) {
@@ -31,6 +39,14 @@ public abstract class NameGameBaseFragment extends Fragment {
     protected void dismissProgressDialog() {
         if (null != progressDialog && progressDialog.isShowing()) {
             progressDialog.dismiss();
+        }
+    }
+
+    protected void dismissDialogsIfNecessary(Dialog... dialogs) {
+        for (Dialog dialog : dialogs) {
+            if (null != dialog && dialog.isShowing()) {
+                dialog.dismiss();
+            }
         }
     }
 }
