@@ -10,7 +10,7 @@ public final class NetworkUtils {
         throw new AssertionError("No instances.");
     }
 
-    public static boolean isNetworkAvailable(@NonNull Context context) {
+    public static boolean networkIsAvailable(@NonNull Context context) {
 
         ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
