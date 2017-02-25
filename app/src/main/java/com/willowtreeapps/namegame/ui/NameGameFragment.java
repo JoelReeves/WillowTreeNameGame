@@ -36,6 +36,8 @@ import butterknife.Unbinder;
 public class NameGameFragment extends NameGameBaseFragment {
 
     private static final Interpolator OVERSHOOT = new OvershootInterpolator();
+    private static final String FORWARD_SLASHES = "//";
+    private static final String HTTP_PREFIX = "http://";
 
     @Inject ProfilesRepository profilesRepository;
     @Inject ListRandomizer listRandomizer;
@@ -86,6 +88,7 @@ public class NameGameFragment extends NameGameBaseFragment {
     public void onResume() {
         super.onResume();
 
+        // checking for a valid network connection before attempting to retrieve profiles
         if (!NetworkUtils.networkIsAvailable(getActivity())) {
             noNetworkDialog = DialogBuilder.showSingleMessageDialog(getActivity(), R.string.network_error_no_network_connection, R.string.button_ok);
         } else {
@@ -117,8 +120,9 @@ public class NameGameFragment extends NameGameBaseFragment {
 
         for (int i = 0; i < n; i++) {
             ImageView face = faces.get(i);
+            final String headshotUrl = people.get(i).getHeadshot().getUrl().replace(FORWARD_SLASHES, HTTP_PREFIX);
 
-            picasso.load(people.get(i).getHeadshot().getUrl().replace("//", "http://"))
+            picasso.load(headshotUrl)
                     .placeholder(R.drawable.ic_face_white_48dp)
                     .resize(imageSize, imageSize)
                     .transform(new CircleBorderTransform())
@@ -149,14 +153,36 @@ public class NameGameFragment extends NameGameBaseFragment {
         //TODO evaluate whether it was the right item and make an action based on that
     }
 
+    /**
+     * Method to start REST call for JSON data
+     */
     private void getProfiles() {
         showProgressDialog();
         profilesRepository.register(repositoryListener);
     }
 
+    /**
+     * Method to display an alert dialog if there is an error in retrieving the JSON data
+     */
     private void showProfileErrorDialog() {
         profileErrorDialog = DialogBuilder.showDialog(getActivity(), R.string.error_title, R.string.network_error_error_retrieving_profiles,
                 R.string.button_retry, R.string.button_cancel, mProfileErrorButtonClickListener);
+    }
+
+    /**
+     * Method to determine if all Item's have a non-null/non-blank Headshot url
+     *
+     * @param itemList List of items to process
+     * @return boolean value indicating whether or not the Headshot url is valid
+     */
+    private boolean peopleHeadshotUrlIsValid(List<Item> itemList) {
+        for (Item item : itemList) {
+            final String headshotUrl = item.getHeadshot().getUrl();
+            if (headshotUrl == null || headshotUrl.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private final ProfilesRepository.Listener repositoryListener = new ProfilesRepository.Listener() {
@@ -164,10 +190,19 @@ public class NameGameFragment extends NameGameBaseFragment {
         public void onLoadFinished(@NonNull Profiles people) {
             dismissProgressDialog();
 
-            List<Item> itemList = listRandomizer.pickN(people.getPeople(), 5);
+            if (people.getPeople().isEmpty()) {
+                showProfileErrorDialog();
+            } else {
+                List<Item> randomPeopleList = listRandomizer.pickN(people.getPeople(), 5);
 
-            if (isAdded()) {
-                setImages(itemList);
+                while (!peopleHeadshotUrlIsValid(randomPeopleList)) {
+                    randomPeopleList.clear();
+                    randomPeopleList.addAll(listRandomizer.pickN(people.getPeople(), 5));
+                }
+
+                if (isAdded()) {
+                    setImages(randomPeopleList);
+                }
             }
         }
 
