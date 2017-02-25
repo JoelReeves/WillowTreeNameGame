@@ -47,7 +47,6 @@ public class NameGameFragment extends NameGameBaseFragment {
     private Unbinder unbinder;
     private Dialog noNetworkDialog;
     private Dialog profileErrorDialog;
-    private List<Item> itemList = new ArrayList<>(5);
     private List<ImageView> faces = new ArrayList<>(5);
 
     public static NameGameFragment newInstance() {
@@ -95,15 +94,10 @@ public class NameGameFragment extends NameGameBaseFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-        profilesRepository.unregister(repositoryListener);
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
+
+        profilesRepository.unregister(repositoryListener);
 
         dismissDialogsIfNecessary(noNetworkDialog, profileErrorDialog);
     }
@@ -170,10 +164,10 @@ public class NameGameFragment extends NameGameBaseFragment {
         public void onLoadFinished(@NonNull Profiles people) {
             dismissProgressDialog();
 
-            List<Item> faceList = listRandomizer.pickN(people.getPeople(), 5);
+            List<Item> itemList = listRandomizer.pickN(people.getPeople(), 5);
 
             if (isAdded()) {
-                setImages(faceList);
+                setImages(itemList);
             }
         }
 
