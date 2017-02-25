@@ -75,6 +75,10 @@ public class Item implements Parcelable {
         return jobTitle;
     }
 
+    public String getWholeName() {
+        return firstName + " " + lastName;
+    }
+
     public String getFirstName() {
         return firstName;
     }
