@@ -92,5 +92,4 @@ public class NetworkModule {
                 .defaultBitmapConfig(Bitmap.Config.ARGB_8888)
                 .build();
     }
-
 }
