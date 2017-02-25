@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.core.ListRandomizer;
 import com.willowtreeapps.namegame.core.NameGameApplication;
-import com.willowtreeapps.namegame.network.api.NameGameApi;
+import com.willowtreeapps.namegame.network.api.ProfilesRepository;
 import com.willowtreeapps.namegame.network.api.model.Item;
 import com.willowtreeapps.namegame.network.api.model.Profiles;
 import com.willowtreeapps.namegame.util.CircleBorderTransform;
@@ -30,16 +30,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import timber.log.Timber;
 
 public class NameGameFragment extends Fragment {
 
     private static final Interpolator OVERSHOOT = new OvershootInterpolator();
 
-    @Inject NameGameApi nameGameApi;
+    @Inject ProfilesRepository profilesRepository;
     @Inject ListRandomizer listRandomizer;
     @Inject Picasso picasso;
 
@@ -91,27 +88,20 @@ public class NameGameFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+        profilesRepository.unregister(repositoryListener);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
 
     private void getProfiles() {
-        nameGameApi.getProfiles().enqueue(new Callback<Profiles>() {
-            @Override
-            public void onResponse(Call<Profiles> call, Response<Profiles> response) {
-                if (response.isSuccessful()) {
-                    Timber.d(response.body().toString());
-                } else {
-                    Timber.d("network error");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Profiles> call, Throwable t) {
-                Timber.d(t.getMessage());
-            }
-        });
+        profilesRepository.register(repositoryListener);
     }
 
     /**
@@ -152,5 +142,19 @@ public class NameGameFragment extends Fragment {
     private void onPersonSelected(@NonNull View view, @NonNull Item item) {
         //TODO evaluate whether it was the right item and make an action based on that
     }
+
+    private final ProfilesRepository.Listener repositoryListener = new ProfilesRepository.Listener() {
+        @Override
+        public void onLoadFinished(@NonNull Profiles people) {
+            for (Item item : people.getPeople()) {
+                Timber.d(item.toString());
+            }
+        }
+
+        @Override
+        public void onError(@NonNull Throwable error) {
+            Timber.e(error.getMessage());
+        }
+    };
 
 }
