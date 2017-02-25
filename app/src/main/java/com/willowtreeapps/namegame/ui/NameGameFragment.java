@@ -45,6 +45,8 @@ public class NameGameFragment extends NameGameBaseFragment {
     @BindView(R.id.face_container) ViewGroup container;
 
     private Unbinder unbinder;
+    private Profiles profiles;
+    private List<Item> itemList = new ArrayList<>(5);
     private List<ImageView> faces = new ArrayList<>(5);
 
     public static NameGameFragment newInstance() {
@@ -148,9 +150,7 @@ public class NameGameFragment extends NameGameBaseFragment {
         @Override
         public void onLoadFinished(@NonNull Profiles people) {
             dismissProgressDialog();
-            for (Item item : people.getPeople()) {
-                Timber.d(item.toString());
-            }
+            profiles = people;
         }
 
         @Override
