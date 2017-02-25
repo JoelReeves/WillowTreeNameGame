@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -38,13 +37,14 @@ public class NameGameFragment extends NameGameBaseFragment {
     private static final Interpolator OVERSHOOT = new OvershootInterpolator();
     private static final String FORWARD_SLASHES = "//";
     private static final String HTTP_PREFIX = "http://";
+    private static final int NUMBER_OF_IMAGES = 5;
 
     @Inject ProfilesRepository profilesRepository;
     @Inject ListRandomizer listRandomizer;
     @Inject Picasso picasso;
 
     @BindViews({R.id.iv_first, R.id.iv_second, R.id.iv_third, R.id.iv_fourth, R.id.iv_fifth})
-    ImageView[] faces;
+    PersonView[] faces;
 
     @BindView(R.id.title) TextView title;
     @BindView(R.id.face_container) ViewGroup container;
@@ -110,17 +110,19 @@ public class NameGameFragment extends NameGameBaseFragment {
      */
     private void setImages(List<Item> people) {
         int imageSize = (int) Ui.convertDpToPixel(100, getContext());
-        int n = faces.length;
 
-        for (int i = 0; i < n; i++) {
-            ImageView face = faces[i];
-            final String headshotUrl = people.get(i).getHeadshot().getUrl().replace(FORWARD_SLASHES, HTTP_PREFIX);
+        for (int index = 0, size = faces.length; index < size; index++) {
+            PersonView face = faces[index];
+            face.setItem(people.get(index));
+            face.setPersonViewClickListener(mPersonViewClickListener);
+
+            final String headshotUrl = face.getItem().getHeadshot().getUrl().replace(FORWARD_SLASHES, HTTP_PREFIX);
 
             picasso.load(headshotUrl)
                     .placeholder(R.drawable.ic_face_white_48dp)
                     .resize(imageSize, imageSize)
                     .transform(new CircleBorderTransform())
-                    .into(face);
+                    .into(face.getPersonImage());
         }
 
         animateFacesIn();
@@ -132,19 +134,9 @@ public class NameGameFragment extends NameGameBaseFragment {
     private void animateFacesIn() {
         title.animate().alpha(1).start();
         for (int i = 0; i < faces.length; i++) {
-            ImageView face = faces[i];
+            PersonView face = faces[i];
             face.animate().scaleX(1).scaleY(1).setStartDelay(800 + 120 * i).setInterpolator(OVERSHOOT).start();
         }
-    }
-
-    /**
-     * A method to handle when a item is selected
-     *
-     * @param view   The view that was selected
-     * @param item The item that was selected
-     */
-    private void onPersonSelected(@NonNull View view, @NonNull Item item) {
-        //TODO evaluate whether it was the right item and make an action based on that
     }
 
     /**
@@ -179,6 +171,13 @@ public class NameGameFragment extends NameGameBaseFragment {
         return true;
     }
 
+    private final PersonView.PersonViewClickListener mPersonViewClickListener = new PersonView.PersonViewClickListener() {
+        @Override
+        public void onPersonClick(@NonNull Item item) {
+
+        }
+    };
+
     private final ProfilesRepository.Listener repositoryListener = new ProfilesRepository.Listener() {
         @Override
         public void onLoadFinished(@NonNull Profiles people) {
@@ -187,11 +186,11 @@ public class NameGameFragment extends NameGameBaseFragment {
             if (people.getPeople().isEmpty()) {
                 showProfileErrorDialog();
             } else {
-                List<Item> randomPeopleList = listRandomizer.pickN(people.getPeople(), 5);
+                List<Item> randomPeopleList = listRandomizer.pickN(people.getPeople(), NUMBER_OF_IMAGES);
 
                 while (!peopleHeadshotUrlIsValid(randomPeopleList)) {
                     randomPeopleList.clear();
-                    randomPeopleList.addAll(listRandomizer.pickN(people.getPeople(), 5));
+                    randomPeopleList.addAll(listRandomizer.pickN(people.getPeople(), NUMBER_OF_IMAGES));
                 }
 
                 if (isAdded()) {

@@ -22,7 +22,7 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <ImageView
+        <com.willowtreeapps.namegame.ui.PersonView
             android:id="@+id/iv_first"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -30,7 +30,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/cdFace"/>
 
-        <ImageView
+        <com.willowtreeapps.namegame.ui.PersonView
             android:id="@+id/iv_second"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -38,7 +38,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/cdFace"/>
 
-        <ImageView
+        <com.willowtreeapps.namegame.ui.PersonView
             android:id="@+id/iv_third"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -46,7 +46,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/cdFace"/>
 
-        <ImageView
+        <com.willowtreeapps.namegame.ui.PersonView
             android:id="@+id/iv_fourth"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -54,7 +54,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/cdFace"/>
 
-        <ImageView
+        <com.willowtreeapps.namegame.ui.PersonView
             android:id="@+id/iv_fifth"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
