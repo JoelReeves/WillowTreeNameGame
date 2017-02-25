@@ -1,6 +1,5 @@
 package com.willowtreeapps.namegame.ui;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -46,18 +45,10 @@ public class NameGameFragment extends NameGameBaseFragment {
     @BindView(R.id.face_container) ViewGroup container;
 
     private Unbinder unbinder;
-    private ProgressDialog progressDialog;
     private List<ImageView> faces = new ArrayList<>(5);
 
     public static NameGameFragment newInstance() {
         return new NameGameFragment();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        progressDialog = DialogBuilder.showProgressDialog(getActivity(), false);
     }
 
     @Override
@@ -96,6 +87,7 @@ public class NameGameFragment extends NameGameBaseFragment {
         if (!NetworkUtils.isNetworkAvailable(getActivity())) {
             DialogBuilder.showSingleMessageDialog(getActivity(), R.string.network_error_no_network_connection, R.string.button_ok);
         } else {
+            showProgressDialog();
             profilesRepository.register(repositoryListener);
         }
     }
@@ -155,6 +147,7 @@ public class NameGameFragment extends NameGameBaseFragment {
     private final ProfilesRepository.Listener repositoryListener = new ProfilesRepository.Listener() {
         @Override
         public void onLoadFinished(@NonNull Profiles people) {
+            dismissProgressDialog();
             for (Item item : people.getPeople()) {
                 Timber.d(item.toString());
             }
@@ -162,6 +155,7 @@ public class NameGameFragment extends NameGameBaseFragment {
 
         @Override
         public void onError(@NonNull Throwable error) {
+            dismissProgressDialog();
             Timber.e(error.getMessage());
         }
     };
