@@ -27,6 +27,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,8 +43,10 @@ public class NameGameFragment extends Fragment {
     @Inject ListRandomizer listRandomizer;
     @Inject Picasso picasso;
 
-    private TextView title;
-    private ViewGroup container;
+    @BindView(R.id.title) TextView title;
+    @BindView(R.id.face_container) ViewGroup container;
+
+    private Unbinder unbinder;
     private List<ImageView> faces = new ArrayList<>(5);
 
     public static NameGameFragment newInstance() {
@@ -57,14 +62,13 @@ public class NameGameFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.name_game_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.name_game_fragment, container, false);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        title = (TextView) view.findViewById(R.id.title);
-        container = (ViewGroup) view.findViewById(R.id.face_container);
-
         //Hide the views until data loads
         title.setAlpha(0);
 
@@ -84,6 +88,12 @@ public class NameGameFragment extends Fragment {
         super.onResume();
 
         getProfiles();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void getProfiles() {
