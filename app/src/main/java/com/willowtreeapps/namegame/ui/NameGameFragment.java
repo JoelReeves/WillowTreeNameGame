@@ -24,12 +24,12 @@ import com.willowtreeapps.namegame.util.DialogBuilder;
 import com.willowtreeapps.namegame.util.NetworkUtils;
 import com.willowtreeapps.namegame.util.Ui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -43,13 +43,15 @@ public class NameGameFragment extends NameGameBaseFragment {
     @Inject ListRandomizer listRandomizer;
     @Inject Picasso picasso;
 
+    @BindViews({R.id.iv_first, R.id.iv_second, R.id.iv_third, R.id.iv_fourth, R.id.iv_fifth})
+    ImageView[] faces;
+
     @BindView(R.id.title) TextView title;
     @BindView(R.id.face_container) ViewGroup container;
 
     private Unbinder unbinder;
     private Dialog noNetworkDialog;
     private Dialog profileErrorDialog;
-    private List<ImageView> faces = new ArrayList<>(5);
 
     public static NameGameFragment newInstance() {
         return new NameGameFragment();
@@ -70,18 +72,10 @@ public class NameGameFragment extends NameGameBaseFragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        //Hide the views until data loads
+        //Hiding the views until data loads
         title.setAlpha(0);
-
-        int n = container.getChildCount();
-        for (int i = 0; i < n; i++) {
-            ImageView face = (ImageView) container.getChildAt(i);
-            faces.add(face);
-
-            //Hide the views until data loads
-            face.setScaleX(0);
-            face.setScaleY(0);
-        }
+        ButterKnife.apply(faces, View.SCALE_X, 0.0f);
+        ButterKnife.apply(faces, View.SCALE_Y, 0.0f);
     }
 
     @Override
@@ -116,10 +110,10 @@ public class NameGameFragment extends NameGameBaseFragment {
      */
     private void setImages(List<Item> people) {
         int imageSize = (int) Ui.convertDpToPixel(100, getContext());
-        int n = faces.size();
+        int n = faces.length;
 
         for (int i = 0; i < n; i++) {
-            ImageView face = faces.get(i);
+            ImageView face = faces[i];
             final String headshotUrl = people.get(i).getHeadshot().getUrl().replace(FORWARD_SLASHES, HTTP_PREFIX);
 
             picasso.load(headshotUrl)
@@ -137,8 +131,8 @@ public class NameGameFragment extends NameGameBaseFragment {
      */
     private void animateFacesIn() {
         title.animate().alpha(1).start();
-        for (int i = 0; i < faces.size(); i++) {
-            ImageView face = faces.get(i);
+        for (int i = 0; i < faces.length; i++) {
+            ImageView face = faces[i];
             face.animate().scaleX(1).scaleY(1).setStartDelay(800 + 120 * i).setInterpolator(OVERSHOOT).start();
         }
     }
