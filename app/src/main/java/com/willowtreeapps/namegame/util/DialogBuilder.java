@@ -3,7 +3,6 @@ package com.willowtreeapps.namegame.util;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -94,8 +93,12 @@ public final class DialogBuilder {
         return showProgressDialog(activity, null, null, cancelable);
     }
 
-    public static Dialog showChooserDialog(@NonNull Context context, @StringRes int title, @StringRes int button, @NonNull CharSequence[] values, DialogInterface.OnClickListener clickListener) {
-        Dialog dialog = new AlertDialog.Builder(context)
+    public static Dialog showChooserDialog(@NonNull Activity activity, @StringRes int title, @StringRes int button, @NonNull CharSequence[] values, DialogInterface.OnClickListener clickListener) {
+        if (activity.isFinishing()) {
+            return null;
+        }
+
+        Dialog dialog = new AlertDialog.Builder(activity)
                 .setTitle(title)
                 .setItems(values, clickListener)
                 .setPositiveButton(button, null)
