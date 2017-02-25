@@ -32,7 +32,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import timber.log.Timber;
 
 public class NameGameFragment extends NameGameBaseFragment {
 
@@ -46,7 +45,6 @@ public class NameGameFragment extends NameGameBaseFragment {
     @BindView(R.id.face_container) ViewGroup container;
 
     private Unbinder unbinder;
-    private Profiles profiles;
     private Dialog noNetworkDialog;
     private Dialog profileErrorDialog;
     private List<Item> itemList = new ArrayList<>(5);
@@ -119,19 +117,21 @@ public class NameGameFragment extends NameGameBaseFragment {
     /**
      * A method for setting the images from people into the imageviews
      */
-    private void setImages(List<ImageView> faces, Profiles profiles) {
-        List<Item> people = profiles.getPeople();
+    private void setImages(List<Item> people) {
         int imageSize = (int) Ui.convertDpToPixel(100, getContext());
         int n = faces.size();
 
         for (int i = 0; i < n; i++) {
             ImageView face = faces.get(i);
-            picasso.load(people.get(i).getHeadshot().getUrl())
+
+            picasso.load(people.get(i).getHeadshot().getUrl().replace("//", "http://"))
                     .placeholder(R.drawable.ic_face_white_48dp)
                     .resize(imageSize, imageSize)
                     .transform(new CircleBorderTransform())
                     .into(face);
         }
+
+        animateFacesIn();
     }
 
     /**
@@ -169,8 +169,12 @@ public class NameGameFragment extends NameGameBaseFragment {
         @Override
         public void onLoadFinished(@NonNull Profiles people) {
             dismissProgressDialog();
-            profiles = people;
-            Timber.d("Profiles size %d", profiles.getPeople().size());
+
+            List<Item> faceList = listRandomizer.pickN(people.getPeople(), 5);
+
+            if (isAdded()) {
+                setImages(faceList);
+            }
         }
 
         @Override
