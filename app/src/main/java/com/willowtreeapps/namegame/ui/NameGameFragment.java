@@ -20,6 +20,7 @@ import com.willowtreeapps.namegame.network.api.ProfilesRepository;
 import com.willowtreeapps.namegame.network.api.model.Item;
 import com.willowtreeapps.namegame.network.api.model.Profiles;
 import com.willowtreeapps.namegame.util.CircleBorderTransform;
+import com.willowtreeapps.namegame.util.NetworkUtils;
 import com.willowtreeapps.namegame.util.Ui;
 
 import java.util.ArrayList;
@@ -84,7 +85,11 @@ public class NameGameFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        getProfiles();
+        if (!NetworkUtils.isNetworkAvailable(getActivity())) {
+
+        } else {
+            profilesRepository.register(repositoryListener);
+        }
     }
 
     @Override
@@ -98,10 +103,6 @@ public class NameGameFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    private void getProfiles() {
-        profilesRepository.register(repositoryListener);
     }
 
     /**
