@@ -2,6 +2,7 @@ package com.willowtreeapps.namegame.network.api;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.AndroidException;
 
 import com.willowtreeapps.namegame.network.api.model.Profiles;
 
@@ -34,9 +35,15 @@ public class ProfilesRepository {
         this.api.getProfiles().enqueue(new Callback<Profiles>() {
             @Override
             public void onResponse(Call<Profiles> call, Response<Profiles> response) {
-                profiles = response.body();
-                for (Listener listener : listeners) {
-                    listener.onLoadFinished(profiles);
+                if (response.isSuccessful()) {
+                    profiles = response.body();
+                    for (Listener listener : listeners) {
+                        listener.onLoadFinished(profiles);
+                    }
+                } else {
+                    for (Listener listener : listeners) {
+                        listener.onError(new AndroidException("error retrieving profiles"));
+                    }
                 }
             }
 
