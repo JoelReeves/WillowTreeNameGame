@@ -23,6 +23,7 @@ import com.willowtreeapps.namegame.util.DialogBuilder;
 import com.willowtreeapps.namegame.util.NetworkUtils;
 import com.willowtreeapps.namegame.util.Ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,9 +36,11 @@ import butterknife.Unbinder;
 public class NameGameFragment extends NameGameBaseFragment {
 
     private static final Interpolator OVERSHOOT = new OvershootInterpolator();
+    private static final String FACES_KEY = "faces_key";
     private static final String FORWARD_SLASHES = "//";
     private static final String HTTP_PREFIX = "http://";
     private static final int NUMBER_OF_IMAGES = 5;
+    private static final int IMAGE_SIZE = 100;
 
     @Inject ProfilesRepository profilesRepository;
     @Inject ListRandomizer listRandomizer;
@@ -50,6 +53,7 @@ public class NameGameFragment extends NameGameBaseFragment {
     @BindView(R.id.face_container) ViewGroup container;
 
     private Unbinder unbinder;
+    private ArrayList<Item> retainedItems = new ArrayList<>(5);
     private Dialog noNetworkDialog;
     private Dialog profileErrorDialog;
 
@@ -76,17 +80,14 @@ public class NameGameFragment extends NameGameBaseFragment {
         title.setAlpha(0);
         ButterKnife.apply(faces, View.SCALE_X, 0.0f);
         ButterKnife.apply(faces, View.SCALE_Y, 0.0f);
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        // checking for a valid network connection before attempting to retrieve profiles
-        if (!NetworkUtils.networkIsAvailable(getActivity())) {
-            noNetworkDialog = DialogBuilder.showSingleMessageDialog(getActivity(), R.string.network_error_no_network_connection, R.string.button_ok);
-        } else {
+        // on initial creation, loading images from REST call
+        // on re-creation restoring already retrieved Items
+        if (savedInstanceState == null) {
             getProfiles();
+        } else {
+            retainedItems = savedInstanceState.getParcelableArrayList(FACES_KEY);
+            setImages(retainedItems);
         }
     }
 
@@ -105,11 +106,23 @@ public class NameGameFragment extends NameGameBaseFragment {
         unbinder.unbind();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // saving Items
+        for (PersonView face : faces) {
+            retainedItems.add(face.getItem());
+        }
+
+        outState.putParcelableArrayList(FACES_KEY, retainedItems);
+    }
+
     /**
      * A method for setting the images from people into the imageviews
      */
     private void setImages(List<Item> people) {
-        int imageSize = (int) Ui.convertDpToPixel(100, getContext());
+        int imageSize = (int) Ui.convertDpToPixel(IMAGE_SIZE, getContext());
 
         for (int index = 0, size = faces.length; index < size; index++) {
             PersonView face = faces[index];
@@ -143,8 +156,13 @@ public class NameGameFragment extends NameGameBaseFragment {
      * Method to start REST call for JSON data
      */
     private void getProfiles() {
-        showProgressDialog();
-        profilesRepository.register(repositoryListener);
+        // checking for a valid network connection before attempting to retrieve profiles
+        if (!NetworkUtils.networkIsAvailable(getActivity())) {
+            noNetworkDialog = DialogBuilder.showSingleMessageDialog(getActivity(), R.string.network_error_no_network_connection, R.string.button_ok);
+        } else {
+            showProgressDialog();
+            profilesRepository.register(repositoryListener);
+        }
     }
 
     /**
@@ -171,13 +189,6 @@ public class NameGameFragment extends NameGameBaseFragment {
         return true;
     }
 
-    private final PersonView.PersonViewClickListener mPersonViewClickListener = new PersonView.PersonViewClickListener() {
-        @Override
-        public void onPersonClick(@NonNull Item item) {
-
-        }
-    };
-
     private final ProfilesRepository.Listener repositoryListener = new ProfilesRepository.Listener() {
         @Override
         public void onLoadFinished(@NonNull Profiles people) {
@@ -203,6 +214,13 @@ public class NameGameFragment extends NameGameBaseFragment {
         public void onError(@NonNull Throwable error) {
             dismissProgressDialog();
             showProfileErrorDialog();
+        }
+    };
+
+    private final PersonView.PersonViewClickListener mPersonViewClickListener = new PersonView.PersonViewClickListener() {
+        @Override
+        public void onPersonClick(@NonNull Item item) {
+
         }
     };
 
