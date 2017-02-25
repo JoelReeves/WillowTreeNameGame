@@ -1,9 +1,9 @@
 package com.willowtreeapps.namegame.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.willowtreeapps.namegame.R;
+import com.willowtreeapps.namegame.core.ApplicationComponent;
 import com.willowtreeapps.namegame.core.ListRandomizer;
-import com.willowtreeapps.namegame.core.NameGameApplication;
 import com.willowtreeapps.namegame.network.api.ProfilesRepository;
 import com.willowtreeapps.namegame.network.api.model.Item;
 import com.willowtreeapps.namegame.network.api.model.Profiles;
@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import timber.log.Timber;
 
-public class NameGameFragment extends Fragment {
+public class NameGameFragment extends NameGameBaseFragment {
 
     private static final Interpolator OVERSHOOT = new OvershootInterpolator();
 
@@ -46,6 +46,7 @@ public class NameGameFragment extends Fragment {
     @BindView(R.id.face_container) ViewGroup container;
 
     private Unbinder unbinder;
+    private ProgressDialog progressDialog;
     private List<ImageView> faces = new ArrayList<>(5);
 
     public static NameGameFragment newInstance() {
@@ -55,7 +56,13 @@ public class NameGameFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NameGameApplication.get(getActivity()).component().inject(this);
+
+        progressDialog = DialogBuilder.showProgressDialog(getActivity(), false);
+    }
+
+    @Override
+    protected void inject(ApplicationComponent component) {
+        component.inject(this);
     }
 
     @Nullable
