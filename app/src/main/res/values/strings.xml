@@ -2,4 +2,6 @@
     <string name="app_name">Name Game</string>
     <string name="question">Who is %s?</string>
     <string name="cdFace">A face</string>
+    <string name="button_ok">OK</string>
+    <string name="network_error_no_network_connection">Please check your network connection.</string>
 </resources>

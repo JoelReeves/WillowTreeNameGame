@@ -20,6 +20,7 @@ import com.willowtreeapps.namegame.network.api.ProfilesRepository;
 import com.willowtreeapps.namegame.network.api.model.Item;
 import com.willowtreeapps.namegame.network.api.model.Profiles;
 import com.willowtreeapps.namegame.util.CircleBorderTransform;
+import com.willowtreeapps.namegame.util.DialogBuilder;
 import com.willowtreeapps.namegame.util.NetworkUtils;
 import com.willowtreeapps.namegame.util.Ui;
 
@@ -86,7 +87,7 @@ public class NameGameFragment extends Fragment {
         super.onResume();
 
         if (!NetworkUtils.isNetworkAvailable(getActivity())) {
-
+            DialogBuilder.showSingleMessageDialog(getActivity(), R.string.network_error_no_network_connection, R.string.button_ok);
         } else {
             profilesRepository.register(repositoryListener);
         }
