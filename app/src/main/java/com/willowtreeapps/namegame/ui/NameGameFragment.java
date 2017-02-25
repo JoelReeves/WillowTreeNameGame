@@ -1,5 +1,6 @@
 package com.willowtreeapps.namegame.ui;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -46,6 +47,8 @@ public class NameGameFragment extends NameGameBaseFragment {
 
     private Unbinder unbinder;
     private Profiles profiles;
+    private Dialog noNetworkDialog;
+    private Dialog profileErrorDialog;
     private List<Item> itemList = new ArrayList<>(5);
     private List<ImageView> faces = new ArrayList<>(5);
 
@@ -86,11 +89,10 @@ public class NameGameFragment extends NameGameBaseFragment {
     public void onResume() {
         super.onResume();
 
-        if (!NetworkUtils.isNetworkAvailable(getActivity())) {
-            DialogBuilder.showSingleMessageDialog(getActivity(), R.string.network_error_no_network_connection, R.string.button_ok);
+        if (!NetworkUtils.networkIsAvailable(getActivity())) {
+            noNetworkDialog = DialogBuilder.showSingleMessageDialog(getActivity(), R.string.network_error_no_network_connection, R.string.button_ok);
         } else {
-            showProgressDialog();
-            profilesRepository.register(repositoryListener);
+            getProfiles();
         }
     }
 
@@ -99,6 +101,13 @@ public class NameGameFragment extends NameGameBaseFragment {
         super.onPause();
 
         profilesRepository.unregister(repositoryListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        dismissDialogsIfNecessary(noNetworkDialog, profileErrorDialog);
     }
 
     @Override
@@ -146,18 +155,40 @@ public class NameGameFragment extends NameGameBaseFragment {
         //TODO evaluate whether it was the right item and make an action based on that
     }
 
+    private void getProfiles() {
+        showProgressDialog();
+        profilesRepository.register(repositoryListener);
+    }
+
+    private void showProfileErrorDialog() {
+        profileErrorDialog = DialogBuilder.showDialog(getActivity(), R.string.error_title, R.string.network_error_error_retrieving_profiles,
+                R.string.button_retry, R.string.button_cancel, mProfileErrorButtonClickListener);
+    }
+
     private final ProfilesRepository.Listener repositoryListener = new ProfilesRepository.Listener() {
         @Override
         public void onLoadFinished(@NonNull Profiles people) {
             dismissProgressDialog();
             profiles = people;
+            Timber.d("Profiles size %d", profiles.getPeople().size());
         }
 
         @Override
         public void onError(@NonNull Throwable error) {
             dismissProgressDialog();
-            Timber.e(error.getMessage());
+            showProfileErrorDialog();
         }
     };
 
+    private final DialogBuilder.ButtonClickListener mProfileErrorButtonClickListener = new DialogBuilder.ButtonClickListener() {
+        @Override
+        public void onPositiveClick() {
+            getProfiles();
+        }
+
+        @Override
+        public void onNegativeClick() {
+            dismissDialogsIfNecessary(profileErrorDialog);
+        }
+    };
 }
