@@ -18,16 +18,4 @@
         tools:src="@drawable/ic_face_white_48dp"
         android:contentDescription="@null"/>
 
-    <ImageView
-        android:id="@+id/answer"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_margin="10dp"
-        android:layout_gravity="center_horizontal"
-        android:visibility="invisible"
-        tools:src="@drawable/ic_correct_answer"
-        tools:visibility="visible"
-        android:contentDescription="@null"/>
-
 </LinearLayout>

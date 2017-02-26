@@ -21,7 +21,6 @@ public class PersonView extends FrameLayout {
     }
 
     @BindView(R.id.willowtree_employee) ImageView person;
-    @BindView(R.id.answer) ImageView answer;
 
     private Item item;
     private PersonViewClickListener personViewClickListener;
@@ -53,11 +52,6 @@ public class PersonView extends FrameLayout {
 
     public ImageView getPersonImage() {
         return person;
-    }
-
-    public void showAnswer(boolean answerIsCorrect) {
-        answer.setVisibility(VISIBLE);
-        answer.setImageResource(answerIsCorrect ? R.drawable.ic_correct_answer : R.drawable.ic_incorrect_answer);
     }
 
     public void setPersonViewClickListener(PersonViewClickListener personViewClickListener) {

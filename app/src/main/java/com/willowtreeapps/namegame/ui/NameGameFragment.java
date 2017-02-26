@@ -34,6 +34,7 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 public class NameGameFragment extends NameGameBaseFragment {
 
@@ -248,7 +249,7 @@ public class NameGameFragment extends NameGameBaseFragment {
     private final DialogInterface.OnClickListener confirmAnswerListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            chosenPerson.showAnswer(answerCorrect);
+            Timber.d(answerCorrect ? "correct" : "incorrect");
         }
     };
 
