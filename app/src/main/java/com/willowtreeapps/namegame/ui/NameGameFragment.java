@@ -47,6 +47,9 @@ public class NameGameFragment extends NameGameBaseFragment {
     private static final Interpolator OVERSHOOT = new OvershootInterpolator();
     private static final String FACES_KEY = "faces_key";
     private static final String ANSWERS_KEY = "answers_key";
+    private static final String TOTAL_GUESSES_KEY = "total_answers_key";
+    private static final String CORRECT_GUESSES_KEY = "correct_answers_key";
+    private static final String INCORRECT_GUESSES_KEY = "incorrect_answers_key";
     private static final String FORWARD_SLASHES = "//";
     private static final String HTTP_PREFIX = "http://";
     private static final int NUMBER_OF_IMAGES = 5;
@@ -70,6 +73,9 @@ public class NameGameFragment extends NameGameBaseFragment {
     private Unbinder unbinder;
     private boolean answerCorrect;
     private String[] answers;
+    private int totalGuesses;
+    private int correctGuesses;
+    private int incorrectGuesses;
     private Item chosenItem;
     private PersonView chosenPerson;
     private ArrayList<Item> retainedItems = new ArrayList<>(NUMBER_OF_IMAGES);
@@ -112,6 +118,9 @@ public class NameGameFragment extends NameGameBaseFragment {
             setImages(retainedItems);
 
             retainedAnswerState = savedInstanceState.getBooleanArray(ANSWERS_KEY);
+            totalGuesses = savedInstanceState.getInt(TOTAL_GUESSES_KEY);
+            correctGuesses = savedInstanceState.getInt(CORRECT_GUESSES_KEY);
+            incorrectGuesses = savedInstanceState.getInt(INCORRECT_GUESSES_KEY);
 
             for (int index = 0; index < NUMBER_OF_IMAGES; index++) {
                 if (retainedAnswerState != null && !retainedAnswerState[index]) {
@@ -148,6 +157,9 @@ public class NameGameFragment extends NameGameBaseFragment {
 
         outState.putParcelableArrayList(FACES_KEY, retainedItems);
         outState.putBooleanArray(ANSWERS_KEY, retainedAnswerState);
+        outState.putInt(TOTAL_GUESSES_KEY, totalGuesses);
+        outState.putInt(CORRECT_GUESSES_KEY, correctGuesses);
+        outState.putInt(INCORRECT_GUESSES_KEY, incorrectGuesses);
     }
 
     /**
@@ -243,6 +255,20 @@ public class NameGameFragment extends NameGameBaseFragment {
         return false;
     }
 
+    /**
+     * Method to calculate the total number of guesses and correct/incorrect guesses
+     * shown at the end of the game
+     */
+    private void calculateGameStats() {
+        totalGuesses++;
+
+        if (answerCorrect) {
+            correctGuesses++;
+        }
+
+        incorrectGuesses = totalGuesses - correctGuesses;
+    }
+
     private final ProfilesRepository.Listener repositoryListener = new ProfilesRepository.Listener() {
         @Override
         public void onLoadFinished(@NonNull Profiles people) {
@@ -298,10 +324,13 @@ public class NameGameFragment extends NameGameBaseFragment {
                 chosenPerson.disable();
             }
 
+            calculateGameStats();
+
             if (arePeopleStillAvailable()) {
                 showAnswerValidationSnackbar();
             } else {
-                gameOverDialog = DialogBuilder.showSingleMessageDialog(getActivity(), R.string.game_over, R.string.button_ok);
+                String messageText = String.format(getString(R.string.game_over_message), totalGuesses, correctGuesses, incorrectGuesses);
+                gameOverDialog = DialogBuilder.showDialog(getActivity(), R.string.game_over_title, messageText, R.string.button_ok);
             }
         }
     };
