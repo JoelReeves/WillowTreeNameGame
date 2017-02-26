@@ -40,6 +40,7 @@ public class NameGameFragment extends NameGameBaseFragment {
 
     private static final Interpolator OVERSHOOT = new OvershootInterpolator();
     private static final String FACES_KEY = "faces_key";
+    private static final String ANSWERS_KEY = "answers_key";
     private static final String FORWARD_SLASHES = "//";
     private static final String HTTP_PREFIX = "http://";
     private static final int NUMBER_OF_IMAGES = 5;
@@ -60,7 +61,9 @@ public class NameGameFragment extends NameGameBaseFragment {
     private boolean answerCorrect;
     private String[] answers;
     private Item chosenItem;
+    private PersonView chosenPerson;
     private ArrayList<Item> retainedItems = new ArrayList<>(NUMBER_OF_IMAGES);
+    private boolean[] retainedAnswerState = new boolean[NUMBER_OF_IMAGES];
     private AlertDialog guessNameDialog;
     private AlertDialog noNetworkDialog;
     private AlertDialog profileErrorDialog;
@@ -96,6 +99,14 @@ public class NameGameFragment extends NameGameBaseFragment {
         } else {
             retainedItems = savedInstanceState.getParcelableArrayList(FACES_KEY);
             setImages(retainedItems);
+
+            retainedAnswerState = savedInstanceState.getBooleanArray(ANSWERS_KEY);
+
+            for (int index = 0; index < NUMBER_OF_IMAGES; index++) {
+                if (!retainedAnswerState[index]) {
+                    faces[index].disable();
+                }
+            }
         }
     }
 
@@ -119,11 +130,13 @@ public class NameGameFragment extends NameGameBaseFragment {
         super.onSaveInstanceState(outState);
 
         // saving Items
-        for (PersonView face : faces) {
-            retainedItems.add(face.getItem());
+        for (int index = 0; index < NUMBER_OF_IMAGES; index++) {
+            retainedItems.add(faces[index].getItem());
+            retainedAnswerState[index] = faces[index].isEnabled();
         }
 
         outState.putParcelableArrayList(FACES_KEY, retainedItems);
+        outState.putBooleanArray(ANSWERS_KEY, retainedAnswerState);
     }
 
     /**
@@ -231,6 +244,7 @@ public class NameGameFragment extends NameGameBaseFragment {
         @Override
         public void onPersonClick(@NonNull PersonView personView, @NonNull Item item) {
             chosenItem = item;
+            chosenPerson = personView;
             answers = personService.getMultipleChoicesForItem(item);
 
             guessNameDialog = DialogBuilder.showChooserDialog(getActivity(), R.string.question, R.string.button_ok, R.string.button_cancel, answers, answerChosenListener, confirmAnswerListener);
@@ -241,13 +255,14 @@ public class NameGameFragment extends NameGameBaseFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             answerCorrect = answers[which].equals(chosenItem.getWholeName());
+            Timber.d(answerCorrect ? "correct" : "incorrect");
         }
     };
 
     private final DialogInterface.OnClickListener confirmAnswerListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            Timber.d(answerCorrect ? "correct" : "incorrect");
+            chosenPerson.disable();
         }
     };
 

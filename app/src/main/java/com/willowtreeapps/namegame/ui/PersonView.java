@@ -37,7 +37,7 @@ public class PersonView extends FrameLayout {
 
     @OnClick(R.id.person_container)
     protected void viewClicked() {
-        if (item != null && personViewClickListener != null) {
+        if (item != null && personViewClickListener != null && isEnabled()) {
             personViewClickListener.onPersonClick(this, item);
         }
     }
@@ -52,6 +52,11 @@ public class PersonView extends FrameLayout {
 
     public ImageView getPersonImage() {
         return person;
+    }
+
+    public void disable() {
+        setEnabled(false);
+        setAlpha(0.2f);
     }
 
     public void setPersonViewClickListener(PersonViewClickListener personViewClickListener) {
