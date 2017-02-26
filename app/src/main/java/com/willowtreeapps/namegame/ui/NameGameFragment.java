@@ -9,6 +9,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
@@ -38,7 +41,6 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import timber.log.Timber;
 
 import static com.willowtreeapps.namegame.util.DialogBuilder.showSingleMessageDialog;
 
@@ -91,6 +93,12 @@ public class NameGameFragment extends NameGameBaseFragment {
     @Override
     protected void inject(ApplicationComponent component) {
         component.inject(this);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -158,6 +166,26 @@ public class NameGameFragment extends NameGameBaseFragment {
         outState.putInt(TOTAL_GUESSES_KEY, totalGuesses);
         outState.putInt(CORRECT_GUESSES_KEY, correctGuesses);
         outState.putInt(INCORRECT_GUESSES_KEY, incorrectGuesses);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.name_game, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_reload:
+                reloadProfiles();
+                return true;
+            case R.id.action_employee_list:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -256,6 +284,10 @@ public class NameGameFragment extends NameGameBaseFragment {
      * Method to reload profiles
      */
     private void reloadProfiles() {
+        for (PersonView personView : faces) {
+            personView.enable(true);
+        }
+
         profilesRepository.unregister(repositoryListener);
         getProfiles();
     }
@@ -319,7 +351,6 @@ public class NameGameFragment extends NameGameBaseFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             answerCorrect = answers[which].equals(chosenItem.getWholeName());
-            Timber.d("%s", answerCorrect);
         }
     };
 
@@ -345,10 +376,6 @@ public class NameGameFragment extends NameGameBaseFragment {
     private final DialogBuilder.ButtonClickListener gameOverClickListener = new DialogBuilder.ButtonClickListener() {
         @Override
         public void onPositiveClick() {
-            for (PersonView personView : faces) {
-                personView.enable(true);
-            }
-
             reloadProfiles();
         }
 

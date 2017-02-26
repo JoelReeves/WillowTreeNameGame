@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Name Game</string>
-    <string name="guess_name_title">Guess each person\'s name</string>
+    <string name="guess_name_title">Guess Each Person</string>
     <string name="question">Who is this?</string>
     <string name="cdFace">A face</string>
     <string name="button_ok">OK</string>
@@ -9,6 +9,9 @@
     <string name="button_play_again">Play Again</string>
     <string name="button_quit">Quit</string>
     <string name="error_title">Error</string>
+    <string name="menu_reload">Reload</string>
+    <string name="menu_name_game">Go to Name Game</string>
+    <string name="menu_employee_list">Go to Employee List</string>
     <string name="game_over_title">Congratulations!</string>
     <string name="game_over_message">Try your luck by playing again!\n\nStats:\nTotal guesses: %1$d\nCorrect guesses: %2$d\nIncorrect guesses: %3$d</string>
     <string name="network_error_no_network_connection">Please check your network connection.</string>
