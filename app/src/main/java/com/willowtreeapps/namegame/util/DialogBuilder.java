@@ -84,6 +84,23 @@ public final class DialogBuilder {
         return showProgressDialog(activity, null, null, cancelable);
     }
 
+    public static AlertDialog showChooserDialog(@NonNull Activity activity, @StringRes int title, @StringRes int positiveButton, @StringRes int negativeButton, @NonNull CharSequence[] values, DialogInterface.OnClickListener answerClickListener, DialogInterface.OnClickListener okClickListener) {
+        if (activity.isFinishing()) {
+            return null;
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(activity)
+                .setTitle(title)
+                .setSingleChoiceItems(values, -1, answerClickListener)
+                .setPositiveButton(positiveButton, okClickListener)
+                .setNegativeButton(negativeButton, null)
+                .create();
+
+        dialog.show();
+
+        return dialog;
+    }
+
     public static class ButtonClickListener implements DialogInterface.OnClickListener {
 
         @Override
