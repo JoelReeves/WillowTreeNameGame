@@ -54,11 +54,6 @@ public class PersonView extends FrameLayout {
         return person;
     }
 
-    public void disable() {
-        setEnabled(false);
-        setAlpha(0.2f);
-    }
-
     public void enable(boolean isEnabled) {
         setEnabled(isEnabled);
         setAlpha(isEnabled ? 1.0f : 0.2f);
