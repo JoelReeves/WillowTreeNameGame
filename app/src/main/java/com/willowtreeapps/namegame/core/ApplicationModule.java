@@ -48,4 +48,8 @@ class ApplicationModule {
         return new ListRandomizer(random);
     }
 
+    @Provides @NonNull @Singleton
+    public PersonService providePersonService(ListRandomizer listRandomizer) {
+        return new PersonService(listRandomizer);
+    }
 }
