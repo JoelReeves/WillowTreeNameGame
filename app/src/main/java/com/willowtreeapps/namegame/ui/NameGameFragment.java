@@ -8,7 +8,6 @@ import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
-import com.squareup.picasso.Picasso;
 import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.core.ApplicationComponent;
 import com.willowtreeapps.namegame.core.ListRandomizer;
@@ -26,14 +24,13 @@ import com.willowtreeapps.namegame.core.PersonService;
 import com.willowtreeapps.namegame.network.api.ProfilesRepository;
 import com.willowtreeapps.namegame.network.api.model.Item;
 import com.willowtreeapps.namegame.network.api.model.Profiles;
-import com.willowtreeapps.namegame.util.CircleBorderTransform;
 import com.willowtreeapps.namegame.util.DialogBuilder;
 import com.willowtreeapps.namegame.util.NetworkUtils;
+import com.willowtreeapps.namegame.util.PicassoUtils;
 import com.willowtreeapps.namegame.util.Ui;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -43,8 +40,6 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static com.willowtreeapps.namegame.ui.NameGameBaseActivity.FORWARD_SLASHES;
-import static com.willowtreeapps.namegame.ui.NameGameBaseActivity.HTTP_PREFIX;
 import static com.willowtreeapps.namegame.util.DialogBuilder.showSingleMessageDialog;
 
 public class NameGameFragment extends NameGameBaseFragment {
@@ -60,9 +55,7 @@ public class NameGameFragment extends NameGameBaseFragment {
 
     @Inject ProfilesRepository profilesRepository;
     @Inject ListRandomizer listRandomizer;
-    @Inject Picasso picasso;
     @Inject PersonService personService;
-    @Inject Random random;
 
     @BindViews({R.id.iv_first, R.id.iv_second, R.id.iv_third, R.id.iv_fourth, R.id.iv_fifth})
     PersonView[] faces;
@@ -207,21 +200,9 @@ public class NameGameFragment extends NameGameBaseFragment {
             face.setItem(people.get(index));
             face.setPersonViewClickListener(mPersonViewClickListener);
 
-            final String headshotUrl = face.getItem().getHeadshot().getUrl();;
+            final String headshotUrl = face.getItem().getHeadshot().getUrl();
 
-            if (TextUtils.isEmpty(headshotUrl)) {
-                picasso.load(R.mipmap.ic_launcher)
-                        .placeholder(R.mipmap.ic_launcher)
-                        .resize(imageSize, imageSize)
-                        .transform(new CircleBorderTransform())
-                        .into(face.getPersonImage());
-            } else {
-                picasso.load(headshotUrl.replace(FORWARD_SLASHES, HTTP_PREFIX))
-                        .placeholder(R.mipmap.ic_launcher)
-                        .resize(imageSize, imageSize)
-                        .transform(new CircleBorderTransform())
-                        .into(face.getPersonImage());
-            }
+            PicassoUtils.loadImageFromUrl(getActivity(), headshotUrl, imageSize, face.getPersonImage());
         }
 
         animateFacesIn();
@@ -256,22 +237,6 @@ public class NameGameFragment extends NameGameBaseFragment {
     private void showProfileErrorDialog() {
         profileErrorDialog = DialogBuilder.showDialog(getActivity(), R.string.error_title, R.string.network_error_error_retrieving_profiles,
                 R.string.button_retry, R.string.button_cancel, mProfileErrorButtonClickListener);
-    }
-
-    /**
-     * Method to determine if all Item's have a non-null/non-blank Headshot url
-     *
-     * @param itemList List of items to process
-     * @return boolean value indicating whether or not the Headshot url is valid
-     */
-    private boolean peopleHeadshotUrlIsValid(List<Item> itemList) {
-        for (Item item : itemList) {
-            final String headshotUrl = item.getHeadshot().getUrl();
-            if (TextUtils.isEmpty(headshotUrl)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -339,11 +304,6 @@ public class NameGameFragment extends NameGameBaseFragment {
                 List<Item> randomPeopleList = listRandomizer.pickN(savedItemList, NUMBER_OF_IMAGES);
 
                 recreateMenu();
-
-                while (!peopleHeadshotUrlIsValid(randomPeopleList)) {
-                    randomPeopleList.clear();
-                    randomPeopleList.addAll(listRandomizer.pickN(savedItemList, NUMBER_OF_IMAGES));
-                }
 
                 if (isAdded()) {
                     setImages(randomPeopleList);

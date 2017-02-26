@@ -3,23 +3,18 @@ package com.willowtreeapps.namegame.ui;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.network.api.model.Item;
-import com.willowtreeapps.namegame.util.CircleBorderTransform;
+import com.willowtreeapps.namegame.util.PicassoUtils;
 import com.willowtreeapps.namegame.util.Ui;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.willowtreeapps.namegame.ui.NameGameBaseActivity.FORWARD_SLASHES;
-import static com.willowtreeapps.namegame.ui.NameGameBaseActivity.HTTP_PREFIX;
 
 public class ItemListViewHolder extends RecyclerView.ViewHolder {
 
@@ -54,22 +49,7 @@ public class ItemListViewHolder extends RecyclerView.ViewHolder {
 
         final int imageSize = (int) Ui.convertDpToPixel(IMAGE_SIZE, context);
         final String headshotUrl = item.getHeadshot().getUrl();
-
-        if (TextUtils.isEmpty(headshotUrl)) {
-            Picasso.with(context)
-                    .load(R.mipmap.ic_launcher)
-                    .placeholder(R.mipmap.ic_launcher)
-                    .resize(imageSize, imageSize)
-                    .transform(new CircleBorderTransform())
-                    .into(employeeImage);
-        } else {
-            Picasso.with(context)
-                    .load(headshotUrl.replace(FORWARD_SLASHES, HTTP_PREFIX))
-                    .placeholder(R.mipmap.ic_launcher)
-                    .resize(imageSize, imageSize)
-                    .transform(new CircleBorderTransform())
-                    .into(employeeImage);
-        }
+        PicassoUtils.loadImageFromUrl(context, headshotUrl, imageSize, employeeImage);
     }
 
     public void setItemViewHolderListener(ItemViewHolderListener itemViewHolderListener) {
