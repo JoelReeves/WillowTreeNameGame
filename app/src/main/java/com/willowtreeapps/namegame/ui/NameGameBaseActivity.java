@@ -18,6 +18,9 @@ public abstract class NameGameBaseActivity extends AppCompatActivity {
     protected abstract Fragment createFragment();
     protected abstract String getFragmentTag();
 
+    public static final String FORWARD_SLASHES = "//";
+    public static final String HTTP_PREFIX = "http://";
+
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override

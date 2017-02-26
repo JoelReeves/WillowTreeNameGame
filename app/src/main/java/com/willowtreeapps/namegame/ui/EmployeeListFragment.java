@@ -1,7 +1,10 @@
 package com.willowtreeapps.namegame.ui;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,11 +14,23 @@ import android.view.ViewGroup;
 
 import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.core.ApplicationComponent;
+import com.willowtreeapps.namegame.core.PersonService;
+import com.willowtreeapps.namegame.network.api.model.Item;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 public class EmployeeListFragment extends NameGameBaseFragment {
+
+    @Inject PersonService personService;
+
+    @BindView(R.id.recyclerview) RecyclerView employeeRecyclerView;
 
     private Unbinder unbinder;
 
@@ -43,6 +58,22 @@ public class EmployeeListFragment extends NameGameBaseFragment {
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        employeeRecyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        populateRecyclerView();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
@@ -57,9 +88,6 @@ public class EmployeeListFragment extends NameGameBaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_employee_list_reload:
-
-                return true;
             case R.id.action_name_game:
                 NameGameActivity.startNameGameActivity(getActivity());
                 return true;
@@ -67,4 +95,20 @@ public class EmployeeListFragment extends NameGameBaseFragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private void populateRecyclerView() {
+        List<Item> itemList = personService.getPersonList();
+        ItemListAdapter itemListAdapter = new ItemListAdapter(itemList);
+        itemListAdapter.setItemClickListener(itemClickListener);
+
+        employeeRecyclerView.setHasFixedSize(true);
+        employeeRecyclerView.setAdapter(itemListAdapter);
+    }
+
+    private final ItemListAdapter.ItemClickListener itemClickListener = new ItemListAdapter.ItemClickListener() {
+        @Override
+        public void onClick(@NonNull Item item) {
+            Timber.d(item.toString());
+        }
+    };
 }

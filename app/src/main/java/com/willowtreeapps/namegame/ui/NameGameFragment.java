@@ -8,6 +8,7 @@ import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,6 +43,8 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.willowtreeapps.namegame.ui.NameGameBaseActivity.FORWARD_SLASHES;
+import static com.willowtreeapps.namegame.ui.NameGameBaseActivity.HTTP_PREFIX;
 import static com.willowtreeapps.namegame.util.DialogBuilder.showSingleMessageDialog;
 
 public class NameGameFragment extends NameGameBaseFragment {
@@ -52,8 +55,6 @@ public class NameGameFragment extends NameGameBaseFragment {
     private static final String TOTAL_GUESSES_KEY = "total_answers_key";
     private static final String CORRECT_GUESSES_KEY = "correct_answers_key";
     private static final String INCORRECT_GUESSES_KEY = "incorrect_answers_key";
-    private static final String FORWARD_SLASHES = "//";
-    private static final String HTTP_PREFIX = "http://";
     private static final int NUMBER_OF_IMAGES = 5;
     private static final int IMAGE_SIZE = 100;
 
@@ -199,20 +200,28 @@ public class NameGameFragment extends NameGameBaseFragment {
      * A method for setting the images from people into the imageviews
      */
     private void setImages(List<Item> people) {
-        int imageSize = (int) Ui.convertDpToPixel(IMAGE_SIZE, getContext());
+        final int imageSize = (int) Ui.convertDpToPixel(IMAGE_SIZE, getContext());
 
         for (int index = 0, size = faces.length; index < size; index++) {
             PersonView face = faces[index];
             face.setItem(people.get(index));
             face.setPersonViewClickListener(mPersonViewClickListener);
 
-            final String headshotUrl = face.getItem().getHeadshot().getUrl().replace(FORWARD_SLASHES, HTTP_PREFIX);
+            final String headshotUrl = face.getItem().getHeadshot().getUrl();;
 
-            picasso.load(headshotUrl)
-                    .placeholder(R.drawable.ic_face_white_48dp)
-                    .resize(imageSize, imageSize)
-                    .transform(new CircleBorderTransform())
-                    .into(face.getPersonImage());
+            if (TextUtils.isEmpty(headshotUrl)) {
+                picasso.load(R.mipmap.ic_launcher)
+                        .placeholder(R.mipmap.ic_launcher)
+                        .resize(imageSize, imageSize)
+                        .transform(new CircleBorderTransform())
+                        .into(face.getPersonImage());
+            } else {
+                picasso.load(headshotUrl.replace(FORWARD_SLASHES, HTTP_PREFIX))
+                        .placeholder(R.mipmap.ic_launcher)
+                        .resize(imageSize, imageSize)
+                        .transform(new CircleBorderTransform())
+                        .into(face.getPersonImage());
+            }
         }
 
         animateFacesIn();
@@ -258,7 +267,7 @@ public class NameGameFragment extends NameGameBaseFragment {
     private boolean peopleHeadshotUrlIsValid(List<Item> itemList) {
         for (Item item : itemList) {
             final String headshotUrl = item.getHeadshot().getUrl();
-            if (headshotUrl == null || headshotUrl.isEmpty()) {
+            if (TextUtils.isEmpty(headshotUrl)) {
                 return false;
             }
         }
