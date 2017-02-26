@@ -9,4 +9,19 @@
         android:icon="@drawable/ic_action_name_game"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/action_sort_first_name_ascending"
+        android:title="@string/menu_sort_first_name_ascending"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_sort_last_name_ascending"
+        android:title="@string/menu_sort_last_name_ascending"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_shuffle_names"
+        android:title="@string/menu_shuffle_names"
+        app:showAsAction="never"/>
+
 </menu>

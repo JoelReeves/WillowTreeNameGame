@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.network.api.model.Item;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListViewHolder> {
@@ -41,6 +43,21 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListViewHolder> {
         return itemList.size();
     }
 
+    public void sortByFirstName() {
+        Collections.sort(itemList, firstNamesAscendingComparator);
+        notifyItemRangeChanged(0, itemList.size());
+    }
+
+    public void sortByLastName() {
+        Collections.sort(itemList, lastNamesAscendingComparator);
+        notifyItemRangeChanged(0, itemList.size());
+    }
+
+    public void shuffleNames() {
+        Collections.shuffle(itemList);
+        notifyItemRangeChanged(0, itemList.size());
+    }
+
     public void setItemClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
@@ -51,6 +68,20 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListViewHolder> {
             if (itemClickListener != null) {
                 itemClickListener.onClick(itemList.get(position));
             }
+        }
+    };
+
+    private final Comparator<Item> firstNamesAscendingComparator = new Comparator<Item>() {
+        @Override
+        public int compare(Item o1, Item o2) {
+            return o1.getFirstName().compareToIgnoreCase(o2.getFirstName());
+        }
+    };
+
+    private final Comparator<Item> lastNamesAscendingComparator = new Comparator<Item>() {
+        @Override
+        public int compare(Item o1, Item o2) {
+            return o1.getLastName().compareToIgnoreCase(o2.getLastName());
         }
     };
 }

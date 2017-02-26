@@ -13,6 +13,9 @@
     <string name="menu_reload">Reload</string>
     <string name="menu_name_game">Go to Name Game</string>
     <string name="menu_employee_list">Go to Employee List</string>
+    <string name="menu_sort_first_name_ascending">Sort By First Name</string>
+    <string name="menu_sort_last_name_ascending">Sort By Last Name</string>
+    <string name="menu_shuffle_names">Shuffle Names</string>
     <string name="game_over_title">Congratulations!</string>
     <string name="game_over_message">Try your luck by playing again!\n\nStats:\nTotal guesses: %1$d\nCorrect guesses: %2$d\nIncorrect guesses: %3$d</string>
     <string name="network_error_no_network_connection">Please check your network connection.</string>

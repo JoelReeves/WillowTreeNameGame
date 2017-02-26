@@ -34,6 +34,7 @@ public class EmployeeListFragment extends NameGameBaseFragment {
     @BindView(R.id.recyclerview) RecyclerView employeeRecyclerView;
 
     private Unbinder unbinder;
+    private ItemListAdapter itemListAdapter;
 
     public static EmployeeListFragment newInstance() {
         return new EmployeeListFragment();
@@ -92,6 +93,18 @@ public class EmployeeListFragment extends NameGameBaseFragment {
             case R.id.action_name_game:
                 NameGameActivity.startNameGameActivity(getActivity());
                 return true;
+            case R.id.action_sort_first_name_ascending:
+                itemListAdapter.sortByFirstName();
+                resetPosition();
+                return true;
+            case R.id.action_sort_last_name_ascending:
+                itemListAdapter.sortByLastName();
+                resetPosition();
+                return true;
+            case R.id.action_shuffle_names:
+                itemListAdapter.shuffleNames();
+                resetPosition();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -99,11 +112,15 @@ public class EmployeeListFragment extends NameGameBaseFragment {
 
     private void populateRecyclerView() {
         List<Item> itemList = personService.getPersonList();
-        ItemListAdapter itemListAdapter = new ItemListAdapter(itemList);
+        itemListAdapter = new ItemListAdapter(itemList);
         itemListAdapter.setItemClickListener(itemClickListener);
 
         employeeRecyclerView.setHasFixedSize(true);
         employeeRecyclerView.setAdapter(itemListAdapter);
+    }
+
+    private void resetPosition() {
+        employeeRecyclerView.scrollToPosition(0);
     }
 
     private final ItemListAdapter.ItemClickListener itemClickListener = new ItemListAdapter.ItemClickListener() {
