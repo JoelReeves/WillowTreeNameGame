@@ -24,9 +24,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import timber.log.Timber;
 
 public class EmployeeListFragment extends NameGameBaseFragment {
+
+    private static final String EMPLOYEE_DIALOG_TAG = "employee_dialog_tag";
 
     @Inject PersonService personService;
 
@@ -108,7 +109,8 @@ public class EmployeeListFragment extends NameGameBaseFragment {
     private final ItemListAdapter.ItemClickListener itemClickListener = new ItemListAdapter.ItemClickListener() {
         @Override
         public void onClick(@NonNull Item item) {
-            Timber.d(item.toString());
+            WillowTreeEmployeeDialogFragment fragment = WillowTreeEmployeeDialogFragment.newInstance(item);
+            fragment.show(getFragmentManager(), EMPLOYEE_DIALOG_TAG);
         }
     };
 }
