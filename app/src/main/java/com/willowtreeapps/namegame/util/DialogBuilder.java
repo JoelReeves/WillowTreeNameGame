@@ -44,21 +44,20 @@ public final class DialogBuilder {
         return dialog;
     }
 
+    public static AlertDialog showDialog(@NonNull Activity activity, @StringRes int title, String message, @StringRes int positiveButton) {
+        return showDialog(activity, title, message, positiveButton, NO_ID, null);
+    }
+
     public static AlertDialog showDialog(@NonNull Activity activity, @StringRes int title, @StringRes int message, @StringRes int positiveButton,
                                          @StringRes int negativeButton, @Nullable ButtonClickListener buttonClickListener) {
         return showDialog(activity, title, activity.getString(message), positiveButton, negativeButton, buttonClickListener);
     }
 
-    public static AlertDialog showDialog(@NonNull Activity activity, @StringRes int title, @StringRes int message, @StringRes int positiveButton,
-                                         @StringRes int negativeButton) {
-        return showDialog(activity, title, message, positiveButton, negativeButton, null);
-    }
-
     public static AlertDialog showSingleMessageDialog(@NonNull Activity activity, @StringRes int message, @StringRes int positiveButton) {
-        return showDialog(activity, NO_ID, message, positiveButton, NO_ID);
+        return showDialog(activity, NO_ID, message, positiveButton, NO_ID, null);
     }
 
-    public static ProgressDialog showProgressDialog(@NonNull Activity activity, @StringRes @Nullable Integer title, @StringRes @Nullable Integer message, boolean cancelable) {
+    public static ProgressDialog showProgressDialog(@NonNull Activity activity, boolean cancelable) {
         if (activity.isFinishing()) {
             return null;
         }
@@ -67,21 +66,9 @@ public final class DialogBuilder {
         progressDialog.setCancelable(cancelable);
         progressDialog.setIndeterminate(true);
 
-        if (null != title) {
-            progressDialog.setTitle(activity.getString(title));
-        }
-
-        if (null != message) {
-            progressDialog.setMessage(activity.getString(message));
-        }
-
         progressDialog.show();
 
         return progressDialog;
-    }
-
-    public static ProgressDialog showProgressDialog(@NonNull Activity activity, boolean cancelable) {
-        return showProgressDialog(activity, null, null, cancelable);
     }
 
     public static AlertDialog showChooserDialog(@NonNull Activity activity, @StringRes int title, @StringRes int positiveButton, @StringRes int negativeButton, @NonNull CharSequence[] values, DialogInterface.OnClickListener answerClickListener, DialogInterface.OnClickListener okClickListener) {
