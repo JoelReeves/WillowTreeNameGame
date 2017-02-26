@@ -4,12 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_employee_list_reload"
-        android:title="@string/menu_reload"
-        android:icon="@drawable/ic_action_reload"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/action_name_game"
         android:title="@string/menu_name_game"
         android:icon="@drawable/ic_action_name_game"
