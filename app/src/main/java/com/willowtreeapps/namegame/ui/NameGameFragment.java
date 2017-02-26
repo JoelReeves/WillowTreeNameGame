@@ -344,11 +344,9 @@ public class NameGameFragment extends NameGameBaseFragment {
             }
 
             calculateGameStats();
+            showAnswerValidationSnackbar();
 
-            if (arePeopleStillAvailable()) {
-                showAnswerValidationSnackbar();
-            } else {
-
+            if (!arePeopleStillAvailable()) {
                 String messageText = String.format(getString(R.string.game_over_message), totalGuesses, correctGuesses, incorrectGuesses);
                 gameOverDialog = DialogBuilder.showDialog(getActivity(), R.string.game_over_title, messageText, R.string.button_play_again, R.string.button_quit, gameOverClickListener);
             }
