@@ -1,7 +1,6 @@
 package com.willowtreeapps.namegame.util;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
@@ -55,14 +54,6 @@ public final class DialogBuilder {
         return showDialog(activity, title, message, positiveButton, negativeButton, null);
     }
 
-    public static AlertDialog showSingleMessageDialog(@NonNull Activity activity, @StringRes int title, @StringRes int message, @StringRes int positiveButton, @Nullable ButtonClickListener buttonClickListener) {
-        return showDialog(activity, title, message, positiveButton, NO_ID, buttonClickListener);
-    }
-
-    public static AlertDialog showSingleMessageDialog(@NonNull Activity activity, @StringRes int title, @StringRes int message, @StringRes int positiveButton) {
-        return showDialog(activity, title, message, positiveButton, NO_ID);
-    }
-
     public static AlertDialog showSingleMessageDialog(@NonNull Activity activity, @StringRes int message, @StringRes int positiveButton) {
         return showDialog(activity, NO_ID, message, positiveButton, NO_ID);
     }
@@ -91,22 +82,6 @@ public final class DialogBuilder {
 
     public static ProgressDialog showProgressDialog(@NonNull Activity activity, boolean cancelable) {
         return showProgressDialog(activity, null, null, cancelable);
-    }
-
-    public static Dialog showChooserDialog(@NonNull Activity activity, @StringRes int title, @StringRes int button, @NonNull CharSequence[] values, DialogInterface.OnClickListener clickListener) {
-        if (activity.isFinishing()) {
-            return null;
-        }
-
-        Dialog dialog = new AlertDialog.Builder(activity)
-                .setTitle(title)
-                .setItems(values, clickListener)
-                .setPositiveButton(button, null)
-                .create();
-
-        dialog.show();
-
-        return dialog;
     }
 
     public static class ButtonClickListener implements DialogInterface.OnClickListener {
