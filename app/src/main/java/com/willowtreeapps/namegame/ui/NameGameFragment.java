@@ -262,7 +262,9 @@ public class NameGameFragment extends NameGameBaseFragment {
     private final DialogInterface.OnClickListener confirmAnswerListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            chosenPerson.disable();
+            if (answerCorrect) {
+                chosenPerson.disable();
+            }
         }
     };
 
