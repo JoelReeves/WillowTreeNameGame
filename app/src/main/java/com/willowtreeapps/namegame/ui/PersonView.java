@@ -17,10 +17,11 @@ import butterknife.OnClick;
 public class PersonView extends FrameLayout {
 
     public interface PersonViewClickListener {
-        void onPersonClick(@NonNull Item item);
+        void onPersonClick(@NonNull PersonView personView, @NonNull Item item);
     }
 
     @BindView(R.id.willowtree_employee) ImageView person;
+    @BindView(R.id.answer) ImageView answer;
 
     private Item item;
     private PersonViewClickListener personViewClickListener;
@@ -38,7 +39,7 @@ public class PersonView extends FrameLayout {
     @OnClick(R.id.person_container)
     protected void viewClicked() {
         if (item != null && personViewClickListener != null) {
-            personViewClickListener.onPersonClick(item);
+            personViewClickListener.onPersonClick(this, item);
         }
     }
 
@@ -52,6 +53,11 @@ public class PersonView extends FrameLayout {
 
     public ImageView getPersonImage() {
         return person;
+    }
+
+    public void showAnswer(boolean answerIsCorrect) {
+        answer.setVisibility(VISIBLE);
+        answer.setImageResource(answerIsCorrect ? R.drawable.ic_correct_answer : R.drawable.ic_incorrect_answer);
     }
 
     public void setPersonViewClickListener(PersonViewClickListener personViewClickListener) {
