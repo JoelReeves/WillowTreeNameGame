@@ -40,8 +40,10 @@ public class PersonService {
         Set<Item> itemSet = new HashSet<>(limit);
         itemSet.add(item);
 
-        for (int index = 0; index < limit - 1; index++) {
-            itemSet.add(listRandomizer.pickOne(personList));
+        for (int index = 1; index < limit - 1; index++) {
+            while (itemSet.size() != limit) {
+                itemSet.add(listRandomizer.pickOne(personList));
+            }
         }
 
         List<Item> namesList = new ArrayList<>(itemSet);
