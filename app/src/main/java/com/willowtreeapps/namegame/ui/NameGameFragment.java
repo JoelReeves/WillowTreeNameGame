@@ -39,6 +39,7 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 import static com.willowtreeapps.namegame.util.DialogBuilder.showSingleMessageDialog;
 
@@ -124,7 +125,7 @@ public class NameGameFragment extends NameGameBaseFragment {
 
             for (int index = 0; index < NUMBER_OF_IMAGES; index++) {
                 if (retainedAnswerState != null && !retainedAnswerState[index]) {
-                    faces[index].disable();
+                    faces[index].enable(false);
                 }
             }
         }
@@ -256,6 +257,14 @@ public class NameGameFragment extends NameGameBaseFragment {
     }
 
     /**
+     * Method to reload profiles
+     */
+    private void reloadProfiles() {
+        profilesRepository.unregister(repositoryListener);
+        getProfiles();
+    }
+
+    /**
      * Method to calculate the total number of guesses and correct/incorrect guesses
      * shown at the end of the game
      */
@@ -314,6 +323,7 @@ public class NameGameFragment extends NameGameBaseFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             answerCorrect = answers[which].equals(chosenItem.getWholeName());
+            Timber.d("%s", answerCorrect);
         }
     };
 
@@ -321,7 +331,7 @@ public class NameGameFragment extends NameGameBaseFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             if (answerCorrect) {
-                chosenPerson.disable();
+                chosenPerson.enable(false);
             }
 
             calculateGameStats();
@@ -329,16 +339,33 @@ public class NameGameFragment extends NameGameBaseFragment {
             if (arePeopleStillAvailable()) {
                 showAnswerValidationSnackbar();
             } else {
+
                 String messageText = String.format(getString(R.string.game_over_message), totalGuesses, correctGuesses, incorrectGuesses);
-                gameOverDialog = DialogBuilder.showDialog(getActivity(), R.string.game_over_title, messageText, R.string.button_ok);
+                gameOverDialog = DialogBuilder.showDialog(getActivity(), R.string.game_over_title, messageText, R.string.button_play_again, R.string.button_quit, gameOverClickListener);
             }
+        }
+    };
+
+    private final DialogBuilder.ButtonClickListener gameOverClickListener = new DialogBuilder.ButtonClickListener() {
+        @Override
+        public void onPositiveClick() {
+            for (PersonView personView : faces) {
+                personView.enable(true);
+            }
+
+            reloadProfiles();
+        }
+
+        @Override
+        public void onNegativeClick() {
+            getActivity().finish();
         }
     };
 
     private final DialogBuilder.ButtonClickListener mProfileErrorButtonClickListener = new DialogBuilder.ButtonClickListener() {
         @Override
         public void onPositiveClick() {
-            getProfiles();
+            reloadProfiles();
         }
 
         @Override

@@ -6,6 +6,8 @@
     <string name="button_ok">OK</string>
     <string name="button_retry">Retry</string>
     <string name="button_cancel">Cancel</string>
+    <string name="button_play_again">Play Again</string>
+    <string name="button_quit">Quit</string>
     <string name="error_title">Error</string>
     <string name="game_over_title">Congratulations!</string>
     <string name="game_over_message">Try your luck by playing again!\n\nStats:\nTotal guesses: %1$d\nCorrect guesses: %2$d\nIncorrect guesses: %3$d</string>

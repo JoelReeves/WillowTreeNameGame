@@ -44,10 +44,6 @@ public final class DialogBuilder {
         return dialog;
     }
 
-    public static AlertDialog showDialog(@NonNull Activity activity, @StringRes int title, String message, @StringRes int positiveButton) {
-        return showDialog(activity, title, message, positiveButton, NO_ID, null);
-    }
-
     public static AlertDialog showDialog(@NonNull Activity activity, @StringRes int title, @StringRes int message, @StringRes int positiveButton,
                                          @StringRes int negativeButton, @Nullable ButtonClickListener buttonClickListener) {
         return showDialog(activity, title, activity.getString(message), positiveButton, negativeButton, buttonClickListener);
