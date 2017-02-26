@@ -60,7 +60,6 @@ public class NameGameFragment extends NameGameBaseFragment {
     private boolean answerCorrect;
     private String[] answers;
     private Item chosenItem;
-    private PersonView chosenPerson;
     private ArrayList<Item> retainedItems = new ArrayList<>(NUMBER_OF_IMAGES);
     private AlertDialog guessNameDialog;
     private AlertDialog noNetworkDialog;
@@ -232,7 +231,6 @@ public class NameGameFragment extends NameGameBaseFragment {
         @Override
         public void onPersonClick(@NonNull PersonView personView, @NonNull Item item) {
             chosenItem = item;
-            chosenPerson = personView;
             answers = personService.getMultipleChoicesForItem(item);
 
             guessNameDialog = DialogBuilder.showChooserDialog(getActivity(), R.string.question, R.string.button_ok, R.string.button_cancel, answers, answerChosenListener, confirmAnswerListener);
