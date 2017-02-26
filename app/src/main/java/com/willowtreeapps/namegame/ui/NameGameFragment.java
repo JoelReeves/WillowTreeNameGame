@@ -1,9 +1,10 @@
 package com.willowtreeapps.namegame.ui;
 
-import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.core.ApplicationComponent;
 import com.willowtreeapps.namegame.core.ListRandomizer;
+import com.willowtreeapps.namegame.core.PersonService;
 import com.willowtreeapps.namegame.network.api.ProfilesRepository;
 import com.willowtreeapps.namegame.network.api.model.Item;
 import com.willowtreeapps.namegame.network.api.model.Profiles;
@@ -45,6 +47,7 @@ public class NameGameFragment extends NameGameBaseFragment {
     @Inject ProfilesRepository profilesRepository;
     @Inject ListRandomizer listRandomizer;
     @Inject Picasso picasso;
+    @Inject PersonService personService;
 
     @BindViews({R.id.iv_first, R.id.iv_second, R.id.iv_third, R.id.iv_fourth, R.id.iv_fifth})
     PersonView[] faces;
@@ -53,9 +56,14 @@ public class NameGameFragment extends NameGameBaseFragment {
     @BindView(R.id.face_container) ViewGroup container;
 
     private Unbinder unbinder;
-    private ArrayList<Item> retainedItems = new ArrayList<>(5);
-    private Dialog noNetworkDialog;
-    private Dialog profileErrorDialog;
+    private boolean answerCorrect;
+    private String[] answers;
+    private Item chosenItem;
+    private PersonView chosenPerson;
+    private ArrayList<Item> retainedItems = new ArrayList<>(NUMBER_OF_IMAGES);
+    private AlertDialog guessNameDialog;
+    private AlertDialog noNetworkDialog;
+    private AlertDialog profileErrorDialog;
 
     public static NameGameFragment newInstance() {
         return new NameGameFragment();
@@ -97,7 +105,7 @@ public class NameGameFragment extends NameGameBaseFragment {
 
         profilesRepository.unregister(repositoryListener);
 
-        dismissDialogsIfNecessary(noNetworkDialog, profileErrorDialog);
+        dismissDialogsIfNecessary(noNetworkDialog, profileErrorDialog, guessNameDialog);
     }
 
     @Override
@@ -197,11 +205,13 @@ public class NameGameFragment extends NameGameBaseFragment {
             if (people.getPeople().isEmpty()) {
                 showProfileErrorDialog();
             } else {
-                List<Item> randomPeopleList = listRandomizer.pickN(people.getPeople(), NUMBER_OF_IMAGES);
+                personService.savePeopleItemList(people.getPeople());
+                ArrayList<Item> savedItemList = personService.getPersonList();
+                List<Item> randomPeopleList = listRandomizer.pickN(savedItemList, NUMBER_OF_IMAGES);
 
                 while (!peopleHeadshotUrlIsValid(randomPeopleList)) {
                     randomPeopleList.clear();
-                    randomPeopleList.addAll(listRandomizer.pickN(people.getPeople(), NUMBER_OF_IMAGES));
+                    randomPeopleList.addAll(listRandomizer.pickN(savedItemList, NUMBER_OF_IMAGES));
                 }
 
                 if (isAdded()) {
@@ -219,8 +229,26 @@ public class NameGameFragment extends NameGameBaseFragment {
 
     private final PersonView.PersonViewClickListener mPersonViewClickListener = new PersonView.PersonViewClickListener() {
         @Override
-        public void onPersonClick(@NonNull Item item) {
+        public void onPersonClick(@NonNull PersonView personView, @NonNull Item item) {
+            chosenItem = item;
+            chosenPerson = personView;
+            answers = personService.getMultipleChoicesForItem(item);
 
+            guessNameDialog = DialogBuilder.showChooserDialog(getActivity(), R.string.question, R.string.button_ok, R.string.button_cancel, answers, answerChosenListener, confirmAnswerListener);
+        }
+    };
+
+    private final DialogInterface.OnClickListener answerChosenListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            answerCorrect = answers[which].equals(chosenItem.getWholeName());
+        }
+    };
+
+    private final DialogInterface.OnClickListener confirmAnswerListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            chosenPerson.showAnswer(answerCorrect);
         }
     };
 
