@@ -40,7 +40,7 @@ public class PersonService {
         Set<Item> itemSet = new HashSet<>(limit);
         itemSet.add(item);
 
-        for (int index = 1; index < limit - 1; index++) {
+        for (int index = 1; index < limit; index++) {
             while (itemSet.size() != limit) {
                 itemSet.add(listRandomizer.pickOne(personList));
             }
