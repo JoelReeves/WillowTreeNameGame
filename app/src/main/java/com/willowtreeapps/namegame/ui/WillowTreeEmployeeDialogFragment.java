@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +24,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static android.view.View.VISIBLE;
+
 public class WillowTreeEmployeeDialogFragment extends DialogFragment {
 
     private static final String ITEM_ARG = "item_arg";
@@ -31,8 +36,10 @@ public class WillowTreeEmployeeDialogFragment extends DialogFragment {
     @BindView(R.id.employee_photo) ImageView employeePhoto;
     @BindView(R.id.employee_name) TextView employeeName;
     @BindView(R.id.employee_job_title) TextView employeeJobTitle;
+    @BindView(R.id.close_dialog) Button closeButton;
 
     private Unbinder unbinder;
+    private Animation fadeInAnimation;
 
     public WillowTreeEmployeeDialogFragment() {}
 
@@ -42,6 +49,14 @@ public class WillowTreeEmployeeDialogFragment extends DialogFragment {
         args.putParcelable(ITEM_ARG, item);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
+        fadeInAnimation.setAnimationListener(animationListener);
     }
 
     @Nullable
@@ -62,6 +77,10 @@ public class WillowTreeEmployeeDialogFragment extends DialogFragment {
             PicassoUtils.loadImageFromUrl(getActivity(), item.getHeadshot().getUrl(), IMAGE_SIZE, employeePhoto);
             employeeName.setText(item.getWholeName());
             employeeJobTitle.setText(item.getJobTitle());
+
+            employeePhoto.startAnimation(fadeInAnimation);
+            employeeName.startAnimation(fadeInAnimation);
+            employeeJobTitle.startAnimation(fadeInAnimation);
         }
     }
 
@@ -86,4 +105,17 @@ public class WillowTreeEmployeeDialogFragment extends DialogFragment {
     protected void closeDialog() {
         dismiss();
     }
+
+    private final Animation.AnimationListener animationListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {}
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            closeButton.setVisibility(VISIBLE);
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {}
+    };
 }

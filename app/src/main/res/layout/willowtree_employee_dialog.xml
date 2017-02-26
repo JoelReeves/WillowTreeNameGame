@@ -41,6 +41,8 @@
         style="@style/BlueButton"
         android:layout_gravity="center"
         android:layout_margin="20dp"
-        android:text="@string/button_ok"/>
+        android:text="@string/button_ok"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
 </LinearLayout>
