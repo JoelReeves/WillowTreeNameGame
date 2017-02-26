@@ -4,6 +4,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,14 +30,17 @@ import com.willowtreeapps.namegame.util.Ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
+import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import timber.log.Timber;
+
+import static com.willowtreeapps.namegame.util.DialogBuilder.showSingleMessageDialog;
 
 public class NameGameFragment extends NameGameBaseFragment {
 
@@ -50,12 +56,16 @@ public class NameGameFragment extends NameGameBaseFragment {
     @Inject ListRandomizer listRandomizer;
     @Inject Picasso picasso;
     @Inject PersonService personService;
+    @Inject Random random;
 
     @BindViews({R.id.iv_first, R.id.iv_second, R.id.iv_third, R.id.iv_fourth, R.id.iv_fifth})
     PersonView[] faces;
 
     @BindView(R.id.title) TextView title;
     @BindView(R.id.face_container) ViewGroup container;
+
+    @BindArray(R.array.correct_answers) String[] correctAnswers;
+    @BindArray(R.array.incorrect_answers) String[] incorrectAnswers;
 
     private Unbinder unbinder;
     private boolean answerCorrect;
@@ -67,6 +77,7 @@ public class NameGameFragment extends NameGameBaseFragment {
     private AlertDialog guessNameDialog;
     private AlertDialog noNetworkDialog;
     private AlertDialog profileErrorDialog;
+    private AlertDialog gameOverDialog;
 
     public static NameGameFragment newInstance() {
         return new NameGameFragment();
@@ -103,7 +114,7 @@ public class NameGameFragment extends NameGameBaseFragment {
             retainedAnswerState = savedInstanceState.getBooleanArray(ANSWERS_KEY);
 
             for (int index = 0; index < NUMBER_OF_IMAGES; index++) {
-                if (!retainedAnswerState[index]) {
+                if (retainedAnswerState != null && !retainedAnswerState[index]) {
                     faces[index].disable();
                 }
             }
@@ -116,7 +127,7 @@ public class NameGameFragment extends NameGameBaseFragment {
 
         profilesRepository.unregister(repositoryListener);
 
-        dismissDialogsIfNecessary(noNetworkDialog, profileErrorDialog, guessNameDialog);
+        dismissDialogsIfNecessary(gameOverDialog, noNetworkDialog, profileErrorDialog, guessNameDialog);
     }
 
     @Override
@@ -179,7 +190,7 @@ public class NameGameFragment extends NameGameBaseFragment {
     private void getProfiles() {
         // checking for a valid network connection before attempting to retrieve profiles
         if (!NetworkUtils.networkIsAvailable(getActivity())) {
-            noNetworkDialog = DialogBuilder.showSingleMessageDialog(getActivity(), R.string.network_error_no_network_connection, R.string.button_ok);
+            noNetworkDialog = showSingleMessageDialog(getActivity(), R.string.network_error_no_network_connection, R.string.button_ok);
         } else {
             showProgressDialog();
             profilesRepository.register(repositoryListener);
@@ -208,6 +219,28 @@ public class NameGameFragment extends NameGameBaseFragment {
             }
         }
         return true;
+    }
+
+    /**
+     * Method to inform you if your chosen answer was correct or not
+     */
+    private void showAnswerValidationSnackbar() {
+        String answer = answerCorrect ? listRandomizer.getRandomString(correctAnswers) : listRandomizer.getRandomString(incorrectAnswers);
+        int backgroundColor = answerCorrect ? ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark) : ContextCompat.getColor(getActivity(), R.color.darkRed);
+
+        Snackbar snackbar = Snackbar.make(container, answer, BaseTransientBottomBar.LENGTH_SHORT);
+        snackbar.getView().setBackgroundColor(backgroundColor);
+        snackbar.setActionTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+        snackbar.show();
+    }
+
+    private boolean arePeopleStillAvailable() {
+        for (PersonView personView : faces) {
+            if (personView.isEnabled()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private final ProfilesRepository.Listener repositoryListener = new ProfilesRepository.Listener() {
@@ -255,7 +288,6 @@ public class NameGameFragment extends NameGameBaseFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             answerCorrect = answers[which].equals(chosenItem.getWholeName());
-            Timber.d(answerCorrect ? "correct" : "incorrect");
         }
     };
 
@@ -264,6 +296,12 @@ public class NameGameFragment extends NameGameBaseFragment {
         public void onClick(DialogInterface dialog, int which) {
             if (answerCorrect) {
                 chosenPerson.disable();
+            }
+
+            if (arePeopleStillAvailable()) {
+                showAnswerValidationSnackbar();
+            } else {
+                gameOverDialog = DialogBuilder.showSingleMessageDialog(getActivity(), R.string.game_over, R.string.button_ok);
             }
         }
     };

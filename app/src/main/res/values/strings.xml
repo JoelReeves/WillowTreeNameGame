@@ -7,6 +7,7 @@
     <string name="button_retry">Retry</string>
     <string name="button_cancel">Cancel</string>
     <string name="error_title">Error</string>
+    <string name="game_over">Congratulations! Please try playing again.</string>
     <string name="network_error_no_network_connection">Please check your network connection.</string>
     <string name="network_error_error_retrieving_profiles">Error retrieving profiles. Please try again.</string>
 </resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="correct_answers">
+        <item>I bow before you!</item>
+        <item>You are a superstar!</item>
+        <item>You came to play!</item>
+        <item>You are amazing!</item>
+        <item>I want to be you when I grow up!</item>
+        <item>OK, how long have you worked here?!</item>
+        <item>Stunning performance</item>
+        <item>Keep it up!</item>
+        <item>You\'re a WillowTtee Wizard!</item>
+        <item>Congrats!</item>
+    </string-array>
+
+    <string-array name="incorrect_answers">
+        <item>Sorry please try again</item>
+        <item>You should be ashamed</item>
+        <item>Go back to sleep</item>
+        <item>You are the weakest link. Goodbye!</item>
+        <item>I don\'t think so</item>
+        <item>It\'s like you don\'t even know me!</item>
+        <item>Google it!</item>
+        <item>Just sit there in your wrongness</item>
+        <item>You\'re entitled to your incorrect opinion</item>
+        <item>Not even close!</item>
+    </string-array>
+
+</resources>

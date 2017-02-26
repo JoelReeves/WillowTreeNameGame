@@ -32,4 +32,9 @@ public class ListRandomizer {
         }
         return picks;
     }
+
+    @NonNull
+    public String getRandomString(@NonNull String[] array) {
+        return array[random.nextInt(array.length)];
+    }
 }
