@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_gravity="end|center"
-        android:visibility="gone"
+        android:visibility="invisible"
         tools:src="@drawable/ic_correct_answer"
         tools:visibility="visible"
         android:contentDescription="@null"/>
