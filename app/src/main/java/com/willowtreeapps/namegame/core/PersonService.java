@@ -25,6 +25,7 @@ public class PersonService {
     }
 
     public void savePeopleItemList(List<Item> people) {
+        personList.clear();
         personList.addAll(people);
     }
 
