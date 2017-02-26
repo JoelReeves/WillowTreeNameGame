@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.willowtreeapps.namegame.R;
@@ -65,7 +64,6 @@ public class NameGameFragment extends NameGameBaseFragment {
     @BindViews({R.id.iv_first, R.id.iv_second, R.id.iv_third, R.id.iv_fourth, R.id.iv_fifth})
     PersonView[] faces;
 
-    @BindView(R.id.title) TextView title;
     @BindView(R.id.face_container) ViewGroup container;
 
     @BindArray(R.array.correct_answers) String[] correctAnswers;
@@ -106,7 +104,6 @@ public class NameGameFragment extends NameGameBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //Hiding the views until data loads
-        title.setAlpha(0);
         ButterKnife.apply(faces, View.SCALE_X, 0.0f);
         ButterKnife.apply(faces, View.SCALE_Y, 0.0f);
 
@@ -190,7 +187,6 @@ public class NameGameFragment extends NameGameBaseFragment {
      * A method to animate the faces into view
      */
     private void animateFacesIn() {
-        title.animate().alpha(1).start();
         for (int i = 0; i < faces.length; i++) {
             PersonView face = faces[i];
             face.animate().scaleX(1).scaleY(1).setStartDelay(800 + 120 * i).setInterpolator(OVERSHOOT).start();

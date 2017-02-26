@@ -2,14 +2,17 @@ package com.willowtreeapps.namegame.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.core.ApplicationComponent;
 import com.willowtreeapps.namegame.core.NameGameApplication;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class NameGameBaseActivity extends AppCompatActivity {
@@ -17,6 +20,8 @@ public abstract class NameGameBaseActivity extends AppCompatActivity {
     protected abstract void inject(ApplicationComponent component);
     protected abstract Fragment createFragment();
     protected abstract String getFragmentTag();
+
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,6 +32,8 @@ public abstract class NameGameBaseActivity extends AppCompatActivity {
 
         inject(((NameGameApplication) getApplication()).component());
 
+        setSupportActionBar(toolbar);
+
         // using findFragmentByTag to avoid fragment recreation if activity is destroyed & re-created
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag(getFragmentTag());
@@ -36,6 +43,12 @@ public abstract class NameGameBaseActivity extends AppCompatActivity {
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, fragment, getFragmentTag())
                     .commit();
+        }
+    }
+
+    protected void setActionBarTitle(@StringRes int title) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
         }
     }
 }
