@@ -172,6 +172,13 @@ public class NameGameFragment extends NameGameBaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.name_game, menu);
+
+        // determining whether or not to show/hide the employee list menu item
+        // since we don't want to go to the EmployeeListActivity without valid data to display
+        if (menu != null) {
+            boolean hasProfiles = !personService.getPersonList().isEmpty();
+            menu.findItem(R.id.action_employee_list).setEnabled(hasProfiles).setVisible(hasProfiles);
+        }
     }
 
     @Override
@@ -306,6 +313,10 @@ public class NameGameFragment extends NameGameBaseFragment {
         incorrectGuesses = totalGuesses - correctGuesses;
     }
 
+    private void recreateMenu() {
+        getActivity().invalidateOptionsMenu();
+    }
+
     private final ProfilesRepository.Listener repositoryListener = new ProfilesRepository.Listener() {
         @Override
         public void onLoadFinished(@NonNull Profiles people) {
@@ -317,6 +328,8 @@ public class NameGameFragment extends NameGameBaseFragment {
                 personService.savePeopleItemList(people.getPeople());
                 ArrayList<Item> savedItemList = personService.getPersonList();
                 List<Item> randomPeopleList = listRandomizer.pickN(savedItemList, NUMBER_OF_IMAGES);
+
+                recreateMenu();
 
                 while (!peopleHeadshotUrlIsValid(randomPeopleList)) {
                     randomPeopleList.clear();
@@ -394,6 +407,7 @@ public class NameGameFragment extends NameGameBaseFragment {
         @Override
         public void onNegativeClick() {
             dismissDialogsIfNecessary(profileErrorDialog);
+            recreateMenu();
         }
     };
 }
