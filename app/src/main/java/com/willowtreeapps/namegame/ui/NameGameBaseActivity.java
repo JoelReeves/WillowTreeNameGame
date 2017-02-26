@@ -9,15 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.willowtreeapps.namegame.R;
-import com.willowtreeapps.namegame.core.ApplicationComponent;
-import com.willowtreeapps.namegame.core.NameGameApplication;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class NameGameBaseActivity extends AppCompatActivity {
 
-    protected abstract void inject(ApplicationComponent component);
     protected abstract Fragment createFragment();
     protected abstract String getFragmentTag();
 
@@ -29,8 +26,6 @@ public abstract class NameGameBaseActivity extends AppCompatActivity {
         setContentView(R.layout.base_activity);
 
         ButterKnife.bind(this);
-
-        inject(((NameGameApplication) getApplication()).component());
 
         setSupportActionBar(toolbar);
 

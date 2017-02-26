@@ -177,11 +177,11 @@ public class NameGameFragment extends NameGameBaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_reload:
+            case R.id.action_name_game_reload:
                 reloadProfiles();
                 return true;
             case R.id.action_employee_list:
-
+                EmployeeListActivity.startEmployeeListActivity(getActivity());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

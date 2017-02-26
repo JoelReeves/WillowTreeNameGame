@@ -9,12 +9,12 @@ import android.support.v4.app.Fragment;
 
 import com.willowtreeapps.namegame.R;
 
-public class NameGameActivity extends NameGameBaseActivity {
+public class EmployeeListActivity extends NameGameBaseActivity {
 
-    private static final String FRAG_TAG = "NameGameFragmentTag";
+    private static final String FRAG_TAG = "EmployeeListFragmentTag";
 
-    public static void startNameGameActivity(@NonNull Activity activity) {
-        Intent intent = new Intent(activity, NameGameActivity.class);
+    public static void startEmployeeListActivity(@NonNull Activity activity) {
+        Intent intent = new Intent(activity, EmployeeListActivity.class);
         activity.startActivity(intent);
         activity.finish();
     }
@@ -22,12 +22,12 @@ public class NameGameActivity extends NameGameBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarTitle(R.string.guess_name_title);
+        setActionBarTitle(R.string.employee_list_title);
     }
 
     @Override
     protected Fragment createFragment() {
-        return NameGameFragment.newInstance();
+        return EmployeeListFragment.newInstance();
     }
 
     @Override

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Name Game</string>
     <string name="guess_name_title">Guess Each Person</string>
+    <string name="employee_list_title">Employee List</string>
     <string name="question">Who is this?</string>
     <string name="cdFace">A face</string>
     <string name="button_ok">OK</string>
