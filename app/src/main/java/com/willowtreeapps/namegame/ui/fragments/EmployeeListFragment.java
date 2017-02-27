@@ -1,4 +1,4 @@
-package com.willowtreeapps.namegame.ui;
+package com.willowtreeapps.namegame.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +16,9 @@ import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.core.ApplicationComponent;
 import com.willowtreeapps.namegame.core.PersonService;
 import com.willowtreeapps.namegame.network.api.model.Item;
+import com.willowtreeapps.namegame.ui.adapters.ItemListAdapter;
+import com.willowtreeapps.namegame.ui.WillowTreeEmployeeDialogFragment;
+import com.willowtreeapps.namegame.ui.activities.NameGameActivity;
 
 import java.util.List;
 

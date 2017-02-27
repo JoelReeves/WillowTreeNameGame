@@ -1,4 +1,4 @@
-package com.willowtreeapps.namegame.ui;
+package com.willowtreeapps.namegame.ui.adapters.viewholders;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

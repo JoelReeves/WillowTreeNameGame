@@ -1,4 +1,4 @@
-package com.willowtreeapps.namegame.ui;
+package com.willowtreeapps.namegame.ui.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -24,6 +24,8 @@ import com.willowtreeapps.namegame.core.PersonService;
 import com.willowtreeapps.namegame.network.api.ProfilesRepository;
 import com.willowtreeapps.namegame.network.api.model.Item;
 import com.willowtreeapps.namegame.network.api.model.Profiles;
+import com.willowtreeapps.namegame.ui.PersonView;
+import com.willowtreeapps.namegame.ui.activities.EmployeeListActivity;
 import com.willowtreeapps.namegame.util.DialogBuilder;
 import com.willowtreeapps.namegame.util.NetworkUtils;
 import com.willowtreeapps.namegame.util.PicassoUtils;

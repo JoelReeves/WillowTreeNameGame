@@ -1,4 +1,4 @@
-package com.willowtreeapps.namegame.ui;
+package com.willowtreeapps.namegame.ui.fragments;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;

@@ -1,4 +1,4 @@
-package com.willowtreeapps.namegame.ui;
+package com.willowtreeapps.namegame.ui.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

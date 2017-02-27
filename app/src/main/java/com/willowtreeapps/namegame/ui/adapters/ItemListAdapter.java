@@ -1,4 +1,4 @@
-package com.willowtreeapps.namegame.ui;
+package com.willowtreeapps.namegame.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.network.api.model.Item;
+import com.willowtreeapps.namegame.ui.adapters.viewholders.ItemListViewHolder;
 
 import java.util.Collections;
 import java.util.Comparator;
