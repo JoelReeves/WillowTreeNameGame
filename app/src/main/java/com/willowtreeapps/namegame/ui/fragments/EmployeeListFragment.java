@@ -17,7 +17,7 @@ import com.willowtreeapps.namegame.core.ApplicationComponent;
 import com.willowtreeapps.namegame.core.PersonService;
 import com.willowtreeapps.namegame.network.api.model.Item;
 import com.willowtreeapps.namegame.ui.adapters.ItemListAdapter;
-import com.willowtreeapps.namegame.ui.WillowTreeEmployeeDialogFragment;
+import com.willowtreeapps.namegame.ui.EmployeeDialogFragment;
 import com.willowtreeapps.namegame.ui.activities.NameGameActivity;
 
 import java.util.List;
@@ -129,7 +129,7 @@ public class EmployeeListFragment extends NameGameBaseFragment {
     private final ItemListAdapter.ItemClickListener itemClickListener = new ItemListAdapter.ItemClickListener() {
         @Override
         public void onClick(@NonNull Item item) {
-            WillowTreeEmployeeDialogFragment fragment = WillowTreeEmployeeDialogFragment.newInstance(item);
+            EmployeeDialogFragment fragment = EmployeeDialogFragment.newInstance(item);
             fragment.show(getFragmentManager(), EMPLOYEE_DIALOG_TAG);
         }
     };

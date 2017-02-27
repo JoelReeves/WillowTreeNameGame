@@ -22,7 +22,7 @@ public class ItemListViewHolder extends RecyclerView.ViewHolder {
         void onItemClick(int position);
     }
 
-    private static final int IMAGE_SIZE = 50;
+    private static final int IMAGE_SIZE = 75;
 
     @BindView(R.id.employee_picture) ImageView employeeImage;
     @BindView(R.id.employee_name) TextView employeeName;

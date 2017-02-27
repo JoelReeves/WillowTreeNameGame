@@ -26,7 +26,7 @@ import butterknife.Unbinder;
 
 import static android.view.View.VISIBLE;
 
-public class WillowTreeEmployeeDialogFragment extends DialogFragment {
+public class EmployeeDialogFragment extends DialogFragment {
 
     private static final String ITEM_ARG = "item_arg";
     private static final int IMAGE_SIZE = 250;
@@ -41,10 +41,10 @@ public class WillowTreeEmployeeDialogFragment extends DialogFragment {
     private Unbinder unbinder;
     private Animation fadeInAnimation;
 
-    public WillowTreeEmployeeDialogFragment() {}
+    public EmployeeDialogFragment() {}
 
-    public static WillowTreeEmployeeDialogFragment newInstance(@NonNull Item item) {
-        WillowTreeEmployeeDialogFragment fragment = new WillowTreeEmployeeDialogFragment();
+    public static EmployeeDialogFragment newInstance(@NonNull Item item) {
+        EmployeeDialogFragment fragment = new EmployeeDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(ITEM_ARG, item);
         fragment.setArguments(args);
