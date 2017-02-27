@@ -46,16 +46,20 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListViewHolder> {
 
     public void sortByFirstName() {
         Collections.sort(itemList, firstNamesAscendingComparator);
-        notifyItemRangeChanged(0, itemList.size());
+        updateRange();
     }
 
     public void sortByLastName() {
         Collections.sort(itemList, lastNamesAscendingComparator);
-        notifyItemRangeChanged(0, itemList.size());
+        updateRange();
     }
 
     public void shuffleNames() {
         Collections.shuffle(itemList);
+        updateRange();
+    }
+
+    private void updateRange() {
         notifyItemRangeChanged(0, itemList.size());
     }
 
