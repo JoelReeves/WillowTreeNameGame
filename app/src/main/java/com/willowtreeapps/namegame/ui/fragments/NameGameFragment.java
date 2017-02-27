@@ -107,9 +107,7 @@ public class NameGameFragment extends NameGameBaseFragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        //Hiding the views until data loads
-        ButterKnife.apply(faces, View.SCALE_X, 0.0f);
-        ButterKnife.apply(faces, View.SCALE_Y, 0.0f);
+        hideFaces();
 
         // on initial creation, loading images from REST call
         // on re-creation restoring already retrieved Items
@@ -272,7 +270,16 @@ public class NameGameFragment extends NameGameBaseFragment {
         }
 
         profilesRepository.unregister(repositoryListener);
+        hideFaces();
         getProfiles();
+    }
+
+    /**
+     * Method to hide faces
+     */
+    private void hideFaces() {
+        ButterKnife.apply(faces, View.SCALE_X, 0.0f);
+        ButterKnife.apply(faces, View.SCALE_Y, 0.0f);
     }
 
     /**
