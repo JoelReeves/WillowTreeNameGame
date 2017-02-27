@@ -1,3 +1,31 @@
 <resources>
-    <dimen name="name_game_title_text_margin">16dp</dimen>
+    <!-- BaseActivity-->
+    <dimen name="toolbar_elevation">2dp</dimen>
+
+    <!--EmployeeListFragment-->
+    <dimen name="employee_space_bottom_margin">5dp</dimen>
+
+    <!--NameGameFragment-->
+    <dimen name="name_space_bottom_margin">10dp</dimen>
+
+    <!--PersonView-->
+    <dimen name="person_view_image_margin">10dp</dimen>
+
+    <!--RecyclerView-->
+    <dimen name="recycler_view_container_margin">6dp</dimen>
+    <dimen name="recycler_view_container_card_corner_radius">16dp</dimen>
+    <dimen name="recycler_view_container_card_elevation">8dp</dimen>
+    <dimen name="recycler_view_employee_name_text_size">18sp</dimen>
+    <dimen name="recycler_view_employee_name_padding">4dp</dimen>
+
+    <!--EmployeeDialogFragment-->
+    <dimen name="employee_dialog_photo_margin">20dp</dimen>
+    <dimen name="employee_dialog_name_margin">10dp</dimen>
+    <dimen name="employee_dialog_name_text_size">22sp</dimen>
+    <dimen name="employee_dialog_job_title_text_size">16sp</dimen>
+    <dimen name="employee_dialog_ok_button_margin">20dp</dimen>
+
+    <!--blue_button-->
+    <dimen name="blue_button_stroke_width">1dp</dimen>
+    <dimen name="blue_button_radius">18dp</dimen>
 </resources>

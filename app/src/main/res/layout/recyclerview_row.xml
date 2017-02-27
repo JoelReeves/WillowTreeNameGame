@@ -6,10 +6,10 @@
     android:id="@+id/employee_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
+    android:layout_margin="@dimen/recycler_view_container_margin"
     android:foreground="?android:attr/selectableItemBackground"
-    card_view:cardCornerRadius="16dp"
-    card_view:cardElevation="8dp">
+    card_view:cardCornerRadius="@dimen/recycler_view_container_card_corner_radius"
+    card_view:cardElevation="@dimen/recycler_view_container_card_elevation">
 
     <ImageView
         android:id="@+id/employee_picture"
@@ -25,10 +25,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="18sp"
+        android:textSize="@dimen/recycler_view_employee_name_text_size"
         android:gravity="start"
         android:layout_gravity="end|center_vertical"
-        android:padding="4dp"
+        android:padding="@dimen/recycler_view_employee_name_padding"
         tools:text="Joel Reeves"/>
 
 </android.support.v7.widget.CardView>

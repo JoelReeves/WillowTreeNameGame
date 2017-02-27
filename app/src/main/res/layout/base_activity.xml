@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:elevation="2dp"
+        app:elevation="@dimen/toolbar_elevation"
         app:logo="@mipmap/ic_launcher"/>
 
 </FrameLayout>

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:layout_gravity="center"
-        android:layout_margin="20dp"
+        android:layout_margin="@dimen/employee_dialog_photo_margin"
         android:contentDescription="@string/cdFace"
         tools:src="@mipmap/ic_launcher"/>
 
@@ -22,8 +22,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:textSize="22sp"
+        android:layout_margin="@dimen/employee_dialog_name_margin"
+        android:textSize="@dimen/employee_dialog_name_text_size"
         android:textStyle="bold"
         tools:text="Joel Reeves"/>
 
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="16sp"
+        android:textSize="@dimen/employee_dialog_job_title_text_size"
         android:textStyle="bold|italic"
         tools:text="Android Developer"/>
 
@@ -40,7 +40,7 @@
         android:id="@+id/close_dialog"
         style="@style/BlueButton"
         android:layout_gravity="center"
-        android:layout_margin="20dp"
+        android:layout_margin="@dimen/employee_dialog_ok_button_margin"
         android:text="@string/button_ok"
         android:visibility="gone"
         tools:visibility="visible"/>
