@@ -3,7 +3,7 @@ package com.willowtreeapps.namegame.network.api;
 import android.os.Build;
 import android.os.Parcel;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.willowtreeapps.namegame.BuildConfig;
 import com.willowtreeapps.namegame.network.api.model.Item;
 
@@ -18,12 +18,12 @@ import org.robolectric.annotation.Config;
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class ItemTest {
 
-    private Gson gson;
+    private ObjectMapper objectMapper;
     private String testString;
 
     @Before
     public void setUp() throws Exception {
-        gson = new Gson();
+        objectMapper = new ObjectMapper();
         testString = "{\n" +
                 "      \"id\": \"4NCJTL13UkK0qEIAAcg4IQ\",\n" +
                 "      \"type\": \"people\",\n" +
@@ -47,8 +47,8 @@ public class ItemTest {
     }
 
     @Test
-    public void testFromGson() throws Exception {
-        Item item = gson.fromJson(testString, Item.class);
+    public void testFromObjectMapper() throws Exception {
+        Item item = objectMapper.readValue(testString, Item.class);
 
         // Test name
         Assert.assertEquals("First name should match", "Joel", item.getFirstName());
@@ -66,7 +66,7 @@ public class ItemTest {
         Parcel parcel = Parcel.obtain();
 
         //Write ourselves to the parcel
-        Item item = gson.fromJson(testString, Item.class);
+        Item item = objectMapper.readValue(testString, Item.class);
         item.writeToParcel(parcel, 0);
 
         // After you're done with writing, you need to reset the parcel for reading:

@@ -43,7 +43,6 @@ ext {
     retrofitVersion = '2.1.0'
     okHttpVersion = '3.1.2'
     okHttpDownloaderVersion = '1.0.2'
-    gsonVersion = '2.8.0'
     jacksonVersion = '2.8.7'
     junitVersion = '4.12'
     robolectricVersion = '3.2.2'
@@ -67,7 +66,6 @@ dependencies {
 
     compile "com.squareup.picasso:picasso:$picassoVersion"
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-jackson:${retrofitVersion}"
     compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
     compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:$okHttpDownloaderVersion"
@@ -75,7 +73,6 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     provided 'org.glassfish:javax.annotation:3.2-b06'
     compile "com.google.dagger:dagger:$daggerVersion"
-    compile "com.google.code.gson:gson:$gsonVersion"
     compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     compile "com.jakewharton.timber:timber:$timberVersion"
 }

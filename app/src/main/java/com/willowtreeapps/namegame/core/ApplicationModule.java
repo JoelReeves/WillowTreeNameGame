@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.google.gson.Gson;
-
 import java.util.Random;
 
 import javax.inject.Singleton;
@@ -31,11 +29,6 @@ class ApplicationModule {
     @Provides @NonNull @Singleton
     public Context provideContext(@NonNull Application application) {
         return application;
-    }
-
-    @Provides @NonNull @Singleton
-    public Gson provideGson() {
-        return new Gson();
     }
 
     @Provides @NonNull @Singleton

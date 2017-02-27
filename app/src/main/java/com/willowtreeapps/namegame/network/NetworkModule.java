@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
-import com.google.gson.Gson;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.willowtreeapps.namegame.BuildConfig;
@@ -70,7 +69,7 @@ public class NetworkModule {
     }
 
     @Provides @NonNull @Singleton
-    public NameGameApi provideApi(@NonNull Gson gson, @NonNull OkHttpClient client, @NonNull HttpUrl url) {
+    public NameGameApi provideApi(@NonNull OkHttpClient client, @NonNull HttpUrl url) {
         return new Retrofit.Builder()
                 .client(client)
                 .baseUrl(url)
