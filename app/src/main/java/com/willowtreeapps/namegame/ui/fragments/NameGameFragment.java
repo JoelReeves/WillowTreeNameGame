@@ -20,7 +20,6 @@ import android.view.animation.OvershootInterpolator;
 import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.core.ApplicationComponent;
 import com.willowtreeapps.namegame.core.ListRandomizer;
-import com.willowtreeapps.namegame.core.PersonService;
 import com.willowtreeapps.namegame.network.api.ProfilesRepository;
 import com.willowtreeapps.namegame.network.api.model.Item;
 import com.willowtreeapps.namegame.network.api.model.Profiles;
@@ -57,7 +56,6 @@ public class NameGameFragment extends NameGameBaseFragment {
 
     @Inject ProfilesRepository profilesRepository;
     @Inject ListRandomizer listRandomizer;
-    @Inject PersonService personService;
 
     @BindViews({R.id.iv_first, R.id.iv_second, R.id.iv_third, R.id.iv_fourth, R.id.iv_fifth})
     PersonView[] faces;
@@ -170,7 +168,7 @@ public class NameGameFragment extends NameGameBaseFragment {
         // determining whether or not to show/hide the employee list menu item
         // since we don't want to go to the EmployeeListActivity without valid data to display
         if (menu != null) {
-            boolean hasProfiles = !personService.getPersonList().isEmpty();
+            boolean hasProfiles = !profilesRepository.isEmpty();
             menu.findItem(R.id.action_employee_list).setEnabled(hasProfiles).setVisible(hasProfiles);
         }
     }
@@ -308,8 +306,7 @@ public class NameGameFragment extends NameGameBaseFragment {
             if (people.getPeople().isEmpty()) {
                 showProfileErrorDialog();
             } else {
-                personService.savePeopleItemList(people.getPeople());
-                ArrayList<Item> savedItemList = personService.getPersonList();
+                ArrayList<Item> savedItemList = profilesRepository.getItemList();
                 List<Item> randomPeopleList = listRandomizer.pickN(savedItemList, NUMBER_OF_IMAGES);
 
                 recreateMenu();
@@ -332,7 +329,7 @@ public class NameGameFragment extends NameGameBaseFragment {
         public void onPersonClick(@NonNull PersonView personView, @NonNull Item item) {
             chosenItem = item;
             chosenPerson = personView;
-            answers = personService.getMultipleChoicesForItem(item);
+            answers = profilesRepository.getMultipleChoicesForItem(item);
 
             guessNameDialog = DialogBuilder.showChooserDialog(getActivity(), R.string.question, R.string.button_ok, R.string.button_cancel, answers, answerChosenListener, confirmAnswerListener);
         }

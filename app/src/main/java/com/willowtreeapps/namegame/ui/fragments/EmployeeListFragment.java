@@ -14,11 +14,11 @@ import android.view.ViewGroup;
 
 import com.willowtreeapps.namegame.R;
 import com.willowtreeapps.namegame.core.ApplicationComponent;
-import com.willowtreeapps.namegame.core.PersonService;
+import com.willowtreeapps.namegame.network.api.ProfilesRepository;
 import com.willowtreeapps.namegame.network.api.model.Item;
-import com.willowtreeapps.namegame.ui.adapters.ItemListAdapter;
 import com.willowtreeapps.namegame.ui.EmployeeDialogFragment;
 import com.willowtreeapps.namegame.ui.activities.NameGameActivity;
+import com.willowtreeapps.namegame.ui.adapters.ItemListAdapter;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class EmployeeListFragment extends NameGameBaseFragment {
 
     private static final String EMPLOYEE_DIALOG_TAG = "employee_dialog_tag";
 
-    @Inject PersonService personService;
+    @Inject ProfilesRepository profileRepository;
 
     @BindView(R.id.recyclerview) RecyclerView employeeRecyclerView;
 
@@ -114,7 +114,7 @@ public class EmployeeListFragment extends NameGameBaseFragment {
     }
 
     private void populateRecyclerView() {
-        List<Item> itemList = personService.getPersonList();
+        List<Item> itemList = profileRepository.getItemList();
         itemListAdapter = new ItemListAdapter(itemList);
         itemListAdapter.setItemClickListener(itemClickListener);
 

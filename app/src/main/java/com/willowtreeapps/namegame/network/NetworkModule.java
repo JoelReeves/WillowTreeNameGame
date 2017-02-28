@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.willowtreeapps.namegame.BuildConfig;
+import com.willowtreeapps.namegame.core.ListRandomizer;
 import com.willowtreeapps.namegame.network.api.NameGameApi;
 import com.willowtreeapps.namegame.network.api.ProfilesRepository;
 
@@ -80,8 +81,8 @@ public class NetworkModule {
     }
 
     @Provides @NonNull @Singleton
-    public ProfilesRepository providePersonRepository(@NonNull NameGameApi api) {
-        return new ProfilesRepository(api);
+    public ProfilesRepository providePersonRepository(@NonNull NameGameApi api, @NonNull ListRandomizer listRandomizer) {
+        return new ProfilesRepository(api, listRandomizer);
     }
 
     @Provides @NonNull @Singleton
