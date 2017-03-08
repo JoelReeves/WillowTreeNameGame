@@ -303,7 +303,7 @@ public class NameGameFragment extends NameGameBaseFragment {
         public void onLoadFinished(@NonNull Profiles people) {
             dismissProgressDialog();
 
-            if (people.getPeople().isEmpty()) {
+            if (profilesRepository.getItemList().isEmpty()) {
                 showProfileErrorDialog();
             } else {
                 ArrayList<Item> savedItemList = profilesRepository.getItemList();
