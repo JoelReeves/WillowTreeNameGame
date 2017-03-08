@@ -268,6 +268,9 @@ public class NameGameFragment extends NameGameBaseFragment {
         }
 
         profilesRepository.unregister(repositoryListener);
+        totalGuesses = 0;
+        correctGuesses = 0;
+        incorrectGuesses = 0;
         hideFaces();
         getProfiles();
     }
